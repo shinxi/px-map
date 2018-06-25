@@ -32,6 +32,7 @@
     "yargs": "^6.0.0"
   },
   "scripts": {
+    "start": "polymer serve",
     "test": "./node_modules/.bin/wct",
     "build": "./scripts/build.sh"
   },

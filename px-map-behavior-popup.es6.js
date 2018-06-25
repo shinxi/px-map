@@ -42,6 +42,22 @@
       },
 
       /**
+       * Max width of popup container
+       */
+      maxWidth: {
+        type: Number,
+        value: 400,
+      },
+
+      /**
+       * Min width of popup container
+       */
+      minWidth: {
+        type: Number,
+        value: 300,
+      },
+
+      /**
        * Programatically opens and closes the popup. Is updated when the popup
        * is opened by the user through DOM interaction.
        */
@@ -189,6 +205,8 @@
     getInstOptions() {
       const opts = PxMapBehavior.PopupImpl.getInstOptions.call(this);
       return Object.assign({}, opts, {
+        maxWidth: this.maxWidth,
+        minWidth: this.minWidth,
         title: this.title,
         description: this.description,
         imgSrc: this.imgSrc,
@@ -366,12 +384,9 @@
     _createPopup(settings={}) {
       // Assign settings and create content
       this.settings = settings;
-      const { title, description, imgSrc, styleScope } = settings;
+      const { title, description, imgSrc, styleScope, maxWidth, minWidth } = settings;
       const content = this._generatePopupContent(title, description, imgSrc);
       const className = `map-popup-info ${styleScope||''}`
-
-      const maxWidth = 400;
-      const minWidth = 300;
 
       this.initialize({ className, maxWidth, minWidth });
       this.setContent(content);
@@ -488,12 +503,10 @@
     // so hopefully it won't cause grief
     _createPopup(settings={}, config={}) {
       this.settings = settings;
-      const { title, data, styleScope } = settings;
+      const { title, data, styleScope, maxWidth, minWidth } = settings;
       const content = this._generatePopupContent(title, data);
 
       const className = `map-popup-data ${styleScope||''}`
-      const maxWidth = 400;
-      const minWidth = 300;
 
       this.initialize({ className, maxWidth, minWidth });
       this.setContent(content);
