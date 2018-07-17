@@ -114,7 +114,9 @@
 
     getInstOptions() {
       return {
-        opened: this.opened
+        opened: this.opened,
+        minWidth: this.minWidth,
+        maxWidth: this.maxWidth,
       };
     },
 
@@ -205,8 +207,6 @@
     getInstOptions() {
       const opts = PxMapBehavior.PopupImpl.getInstOptions.call(this);
       return Object.assign({}, opts, {
-        maxWidth: this.maxWidth,
-        minWidth: this.minWidth,
         title: this.title,
         description: this.description,
         imgSrc: this.imgSrc,
