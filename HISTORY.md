@@ -1,3 +1,8 @@
+v3.5.1
+===================
+## New features:
+* Increment offset to getBoundsZoom() to fix fitToMarkers attribute of px-map doesn't work
+
 v3.5.0
 ===================
 ## New features:
