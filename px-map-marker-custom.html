@@ -1,0 +1,116 @@
+<!-- Load Polymer base class, for legacy behaviors syntax -->
+<link rel="import" href="../polymer/polymer.html" />
+
+<!-- Load dependencies from px-map -->
+<link rel="import" href="px-map-behavior-marker.html">
+
+<!-- Load px-icons -->
+<link rel="import" href="../px-icon-set/px-icon-set.html" />
+
+<dom-module id="px-map-marker-custom">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+
+    </style>
+    <slot></slot>
+  </template>
+</dom-module>
+<script>
+  {
+    Polymer({
+      is: 'px-map-marker-custom',
+
+      behaviors: [PxMapBehavior.Marker],
+
+      properties: {
+        /**
+         * Name of the px-icon to use for the marker.
+         */
+        icon: String,
+        /*
+         * Color for the icon stroke
+         */
+        strokeColor: {
+          type: String,
+          value: 'black'
+        },
+        /**
+         * Color for the icon fill
+         */
+        fillColor: {
+          type: String,
+          value: 'transparent'
+        },
+        /**
+        * Value inside string
+        */
+        iconContent: {
+          type: String,
+          value: '1'
+        }
+
+      },
+
+      observers: [
+        'shouldUpdateInst(icon)',
+        '_updateMarkerIcon(icon)'
+      ],
+
+      /**
+       * The map won't render the marker until the first time this function returns
+       * `true`. The function will be called by this element's parent every time
+       * one of its properties changes until it returns `true`.
+       */
+      canAddInst() {
+        return PxMapBehavior.MarkerImpl.canAddInst.call(this) && this.icon;
+      },
+
+
+      getMarkerIcon() {
+        if (!this.markerIcon) {
+          const { icon, fillColor, strokeColor, iconContent } = this;
+          this.markerIcon = createCustomMarkerIcon({ icon, fillColor, strokeColor, iconContent });
+        }
+        return this.markerIcon;
+      },
+
+      _updateMarkerIcon() {
+        if (!this.markerIcon) return;
+        const { icon, fillColor, strokeColor, iconContent } = this;
+        this.markerIcon = this.markerIcon = createCustomMarkerIcon({ icon, fillColor, strokeColor, iconContent });
+        this.shouldUpdateInst();
+      }
+    });
+
+    function createCustomMarkerIcon({ icon = '', fillColor = 'black', strokeColor = 'transparent', iconContent = '' }) {
+      let iconVal = '';
+      if (iconContent.indexOf('px-') == -1) {
+        iconVal = `<span style="position: absolute; top:50%; left:50%; margin-left: -10px; margin-top: -10px; width:20px; height:20px; color:blue; font-size: 10px;text-align:center;">${iconContent}</span> `;
+      }
+      else {
+        iconVal =
+          `<px-icon icon="${iconContent}" style="position: absolute; top:50%; left:50%; margin-left: -6px; margin-top: -6px; width:12px; height:12px; stroke:grey; fill:blue;"></px-icon>`;
+      }
+      const html = `
+        <div style="width: 32px; height: 32px; position: relative;" >
+          <px-icon icon="${icon}" style="width:100%; height:100%; stroke:${strokeColor}; fill:${fillColor};"></px-icon>
+        </div>
+        ${iconVal}
+      `;
+      const className = '';
+      const iconSize = L.point(32, 32);
+      const iconAnchor = L.point(16, 32);
+      const popupAnchor = L.point(0, -32);
+      return L.divIcon({
+        className,
+        html,
+        iconSize,
+        iconAnchor,
+        popupAnchor
+      });
+    };
+  }
+</script>

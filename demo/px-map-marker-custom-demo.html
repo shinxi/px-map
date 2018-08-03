@@ -32,14 +32,14 @@ limitations under the License.
 <link rel="import" href="../px-map-tile-layer.html" />
 
 <!-- Custom  -->
-<link rel="import" href="../px-custom-icon-marker.html" />
+<link rel="import" href="../px-map-marker-custom.html" />
 
 <!-- Demo DOM module -->
-<dom-module id="px-custom-icon-marker-demo">
+<dom-module id="px-map-marker-custom-demo">
   <template>
 
     <!-- Header -->
-    <px-demo-header module-name="px-custom-icon-marker-demo" parent-name="px-map" description="The custom icon loads the map with custom icons created."
+    <px-demo-header module-name="px-map-marker-custom-demo" parent-name="px-map" description="The custom icon loads the map with custom icons created."
       mobile tablet desktop>
     </px-demo-header>
 
@@ -58,18 +58,18 @@ limitations under the License.
             <px-map-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"></px-map-tile-layer>
 
             <!-- Use the custom icon marker -->
-            <px-custom-icon-marker lat="37.7022" lng="-121.9358" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white" icon-content="px-nav:home">
-            </px-custom-icon-marker>
+            <px-map-marker-custom lat="37.7022" lng="-121.9358" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white" icon-content="px-nav:home">
+            </px-map-marker-custom>
 
             <!-- Use the custom icon marker -->
-            <px-custom-icon-marker lat="37.779927" lng="-121.978015" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white"
+            <px-map-marker-custom lat="37.779927" lng="-121.978015" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white"
               icon-content="10">
-            </px-custom-icon-marker>
+            </px-map-marker-custom>
 
             <!-- Use the custom icon marker -->
-            <px-custom-icon-marker lat="37.752709" lng="-121.959926" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white"
+            <px-map-marker-custom lat="37.752709" lng="-121.959926" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white"
               icon-content="12">
-            </px-custom-icon-marker>
+            </px-map-marker-custom>
 
 
 
@@ -94,7 +94,7 @@ limitations under the License.
 
 <script>
   Polymer({
-    is: 'px-custom-icon-marker-demo',
+    is: 'px-map-marker-custom-demo',
 
     properties: {
 
