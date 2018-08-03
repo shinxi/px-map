@@ -1,4 +1,9 @@
-v3.5.0
+v3.5.2
+===================
+## Bug fixes:
+* Increment offset to getBoundsZoom() to fix fitToMarkers attribute of px-map doesn't work
+
+v3.5.1
 ===================
 ## New features:
 * Add `maxWidth` (Defaults to 400) and `minWidth` (Defaults to 300) property to
