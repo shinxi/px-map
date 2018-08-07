@@ -210,7 +210,8 @@
         title: this.title,
         description: this.description,
         imgSrc: this.imgSrc,
-        styleScope: this.isShadyScoped() ? this.getShadyScope() : undefined
+        styleScope: this.isShadyScoped() ? this.getShadyScope() : undefined,
+        customContent: this.getEffectiveChildren(),
       });
     }
   };
@@ -384,15 +385,15 @@
     _createPopup(settings={}) {
       // Assign settings and create content
       this.settings = settings;
-      const { title, description, imgSrc, styleScope, maxWidth, minWidth } = settings;
-      const content = this._generatePopupContent(title, description, imgSrc);
+      const { title, description, imgSrc, styleScope, maxWidth, minWidth, customContent } = settings;
+      const content = this._generatePopupContent(title, description, imgSrc, customContent);
       const className = `map-popup-info ${styleScope||''}`
 
-      this.initialize({ className, maxWidth, minWidth });
+      this.initialize({ className, maxWidth, minWidth, customContent });
       this.setContent(content);
     }
 
-    _generatePopupContent(title, description, imgSrc) {
+    _generatePopupContent(title, description, imgSrc, customContent) {
       let tmplFnIf = (fn, ...vals) =>
         vals.length && vals[0] !== undefined ? fn.call(this, ...vals) : '';
 
@@ -412,8 +413,12 @@
         <section class="map-box-info">
           ${tmplFnIf(imgTmpl, imgSrc)}
           <div class="map-box-info__content">
-            ${tmplFnIf(titleTmpl, title)}
-            ${tmplFnIf(descriptionTmpl, description)}
+            ${
+              title || description
+                ? tmplFnIf(titleTmpl, title) +
+                  tmplFnIf(descriptionTmpl, description)
+                : customContent.map(elem => elem.outerHTML)
+            }
           </div>
         </section>
       `;
@@ -421,8 +426,9 @@
 
     updateSettings(settings={}) {
       Object.assign(this.settings, settings);
-      const { title, description, imgSrc, styleScope } = this.settings;
-      const content = this._generatePopupContent(title, description, imgSrc);
+
+      const { title, description, imgSrc, customContent, styleScope } = this.settings;
+      const content = this._generatePopupContent(title, description, imgSrc, customContent);
 
       this.setContent(content);
       this.update();
