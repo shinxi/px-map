@@ -417,7 +417,7 @@
               title || description
                 ? tmplFnIf(titleTmpl, title) +
                   tmplFnIf(descriptionTmpl, description)
-                : customContent.map(elem => elem.outerHTML)
+                : customContent.map(elem => elem.outerHTML).reduce((base, str) => base + str)
             }
           </div>
         </section>
