@@ -393,21 +393,30 @@
       this.setContent(content);
     }
 
-    _generatePopupContent(title, description, imgSrc, customContent) {
-      let tmplFnIf = (fn, ...vals) =>
+    _generatePopupContent(title, description, imgSrc, customContent = []) {
+      const tmplFnIf = (fn, ...vals) =>
         vals.length && vals[0] !== undefined ? fn.call(this, ...vals) : '';
 
-      let imgTmpl = (imgSrc) => `
+      const imgTmpl = (imgSrc) => `
         <div class="map-box-info__image">
           <img src="${imgSrc}" />
         </div>
       `;
-      let titleTmpl = (title) => `
+      const titleTmpl = (title) => `
         <p class="map-box-info__title">${title}</p>
       `;
-      let descriptionTmpl = (description) => `
+      const descriptionTmpl = (description) => `
         <p class="map-box-info__description">${description}</p>
       `;
+
+      const customContentArr = customContent.map(elem => elem.outerHTML);
+      let customContentStr;
+
+      if (customContentArr.length > 1) {
+        customContentStr = customContentArr.reduce((base, str) => base + str)
+      } else {
+        customContentStr = customContentArr[0]
+      }
 
       return `
         <section class="map-box-info">
@@ -417,7 +426,7 @@
               title || description
                 ? tmplFnIf(titleTmpl, title) +
                   tmplFnIf(descriptionTmpl, description)
-                : customContent.map(elem => elem.outerHTML).reduce((base, str) => base + str)
+                : customContentStr
             }
           </div>
         </section>
