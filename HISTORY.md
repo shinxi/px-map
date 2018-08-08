@@ -1,3 +1,8 @@
+v3.6.0
+===================
+## New features:
+* Add custom HTML support for popup info. See `demo/px-map-popup-info-demo.html`.
+
 v3.5.2
 ===================
 ## Bug fixes:

@@ -210,7 +210,8 @@
         title: this.title,
         description: this.description,
         imgSrc: this.imgSrc,
-        styleScope: this.isShadyScoped() ? this.getShadyScope() : undefined
+        styleScope: this.isShadyScoped() ? this.getShadyScope() : undefined,
+        customContent: this.getEffectiveChildren(),
       });
     }
   };
@@ -384,36 +385,49 @@
     _createPopup(settings={}) {
       // Assign settings and create content
       this.settings = settings;
-      const { title, description, imgSrc, styleScope, maxWidth, minWidth } = settings;
-      const content = this._generatePopupContent(title, description, imgSrc);
+      const { title, description, imgSrc, styleScope, maxWidth, minWidth, customContent } = settings;
+      const content = this._generatePopupContent(title, description, imgSrc, customContent);
       const className = `map-popup-info ${styleScope||''}`
 
-      this.initialize({ className, maxWidth, minWidth });
+      this.initialize({ className, maxWidth, minWidth, customContent });
       this.setContent(content);
     }
 
-    _generatePopupContent(title, description, imgSrc) {
-      let tmplFnIf = (fn, ...vals) =>
+    _generatePopupContent(title, description, imgSrc, customContent = []) {
+      const tmplFnIf = (fn, ...vals) =>
         vals.length && vals[0] !== undefined ? fn.call(this, ...vals) : '';
 
-      let imgTmpl = (imgSrc) => `
+      const imgTmpl = (imgSrc) => `
         <div class="map-box-info__image">
           <img src="${imgSrc}" />
         </div>
       `;
-      let titleTmpl = (title) => `
+      const titleTmpl = (title) => `
         <p class="map-box-info__title">${title}</p>
       `;
-      let descriptionTmpl = (description) => `
+      const descriptionTmpl = (description) => `
         <p class="map-box-info__description">${description}</p>
       `;
+
+      const customContentArr = customContent.map(elem => elem.outerHTML);
+      let customContentStr;
+
+      if (customContentArr.length > 1) {
+        customContentStr = customContentArr.reduce((base, str) => base + str)
+      } else {
+        customContentStr = customContentArr[0]
+      }
 
       return `
         <section class="map-box-info">
           ${tmplFnIf(imgTmpl, imgSrc)}
           <div class="map-box-info__content">
-            ${tmplFnIf(titleTmpl, title)}
-            ${tmplFnIf(descriptionTmpl, description)}
+            ${
+              title || description
+                ? tmplFnIf(titleTmpl, title) +
+                  tmplFnIf(descriptionTmpl, description)
+                : customContentStr
+            }
           </div>
         </section>
       `;
@@ -421,8 +435,9 @@
 
     updateSettings(settings={}) {
       Object.assign(this.settings, settings);
-      const { title, description, imgSrc, styleScope } = this.settings;
-      const content = this._generatePopupContent(title, description, imgSrc);
+
+      const { title, description, imgSrc, customContent, styleScope } = this.settings;
+      const content = this._generatePopupContent(title, description, imgSrc, customContent);
 
       this.setContent(content);
       this.update();
