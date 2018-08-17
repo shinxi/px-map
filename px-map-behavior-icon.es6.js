@@ -268,7 +268,7 @@
 
       let iconVal = '';
       if (content.indexOf('px-') == -1) {
-        iconVal = `<span class="map-icon-custom__body">${content}</span> `;
+        iconVal = `<span class="map-icon-custom__body numbered-icon">${content}</span> `;
       }
       else {
         iconVal =

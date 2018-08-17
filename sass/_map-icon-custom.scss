@@ -49,4 +49,8 @@
   text-align:center;
   stroke:var(--px-map-icon-unknown-color);
   fill:var(--internal-px-map-icon-info-color);
+
+  &.numbered-icon {
+    margin-top: -15px;
+  }
 }
