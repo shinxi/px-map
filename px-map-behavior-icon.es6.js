@@ -251,4 +251,66 @@
   };
   /* Bind ClusterIcon klass */
   PxMap.ClusterIcon = ClusterIcon;
+
+    /**
+   *
+   * @class PxMap.CustomIcon
+   */
+  class CustomIcon {
+    constructor(settings={}) {
+      this.icon = this.createIcon(settings);
+      return this.icon;
+    }
+
+    createIcon(settings={}) {
+      // type defaults to type='px-nav:unconfirmed'
+      let { type='px-nav:unconfirmed', styleScope, strokeColor, fillColor, content, options: { icon, strokeColor: iconStrokeColor, fillColor: iconFillColor } } = settings;
+
+      let iconVal = '';
+      if (content.indexOf('px-') == -1) {
+        iconVal = `<span class="map-icon-custom__body">${content}</span> `;
+      }
+      else {
+        iconVal =
+          `<px-icon class="map-icon-custom__body" icon="${content}"></px-icon>`;
+      }
+
+      // Custom template
+      const html = `
+        <div class="map-icon-custom__wrapper">
+          <px-icon icon="${type}" style="stroke:${strokeColor}; fill:${fillColor};"></px-icon>
+        </div>
+        ${iconVal}
+      `;
+
+      const className = this._generateCustomIconClasses(type, styleScope);
+      const iconSize = L.point(32, 32);
+      const iconAnchor = L.point(16, 32);
+      const popupAnchor = L.point(0, -32);
+
+      // Define the `divIcon` options
+      const options = {
+        className,
+        html,
+        iconSize,
+        iconAnchor,
+        popupAnchor
+      };
+      return L.divIcon(options);
+    }
+
+    _generateCustomIconClasses(type, styleScope) {
+      const classes = ['map-icon', 'map-icon-custom'];
+      if (type && type.length) {
+        classes.push(`map-icon-custom--${type}`);
+      }
+      if (styleScope) {
+        classes.push(styleScope);
+      }
+      return classes.join(' ');
+    }
+  };
+  /* Bind CustomIcon klass */
+  PxMap.CustomIcon = CustomIcon;
+
 })();

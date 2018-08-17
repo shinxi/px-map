@@ -1,0 +1,52 @@
+/*
+ * Copyright (c) 2018, General Electric
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+// ICON CONTAINER
+// $px-map-icon-unknown-color:                         var(--internal-px-map-icon-unknown-color, $dv-light-gray);
+// $px-map-icon-info-color:                            var(--internal-px-map-icon-info-color, $primary-blue);
+// $px-map-icon-warning-color:                         var(--internal-px-map-icon-warning-color, $alert-orange);
+// $px-map-icon-important-color:                       var(--internal-px-map-icon-important-color, $alert-red);
+// $px-map-icon-border-color:                          var(--internal-px-map-icon-border-color, $white);
+
+.map-icon-custom {
+  @extend %map-icon !optional;
+  width: 50px;
+  height: 50px;
+  display: block;
+  position: absolute;
+}
+
+.map-icon-custom__wrapper{
+  position: relative;
+  width: 32px;
+  height: 32px;
+}
+
+// ICON BODY
+.map-icon-custom__body {
+  position: absolute;
+  top:50%;
+  left:50%;
+  margin-left: -13px;
+  margin-top: -13px;
+  width:15px;
+  height:15px;
+  color: var(--internal-px-map-icon-info-color);
+  font-size: 12px;
+  text-align:center;
+  stroke:var(--px-map-icon-unknown-color);
+  fill:var(--internal-px-map-icon-info-color);
+}
