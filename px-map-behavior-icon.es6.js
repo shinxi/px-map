@@ -268,19 +268,19 @@
 
       let iconVal = '';
       if (content.indexOf('px-') == -1) {
-        iconVal = `<span class="map-icon-custom__body numbered-icon">${content}</span> `;
+        iconVal = `<span class="map-icon-custom__body">${content}</span> `;
       }
       else {
         iconVal =
-          `<px-icon class="map-icon-custom__body" icon="${content}"></px-icon>`;
+          `<px-icon class="map-icon-custom__body content-icon" icon="${content}"></px-icon>`;
       }
 
       // Custom template
       const html = `
         <div class="map-icon-custom__wrapper">
           <px-icon icon="${type}" style="stroke:${strokeColor}; fill:${fillColor};"></px-icon>
+          ${iconVal}
         </div>
-        ${iconVal}
       `;
 
       const className = this._generateCustomIconClasses(type, styleScope);
