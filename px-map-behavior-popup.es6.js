@@ -41,6 +41,11 @@
         value: false
       },
 
+      margin: {
+        type: String,
+        value: '15px'
+      },
+
       /**
        * Max width of popup container
        */
@@ -115,6 +120,7 @@
     getInstOptions() {
       return {
         opened: this.opened,
+        margin: this.margin,
         minWidth: this.minWidth,
         maxWidth: this.maxWidth,
       };
@@ -385,15 +391,15 @@
     _createPopup(settings={}) {
       // Assign settings and create content
       this.settings = settings;
-      const { title, description, imgSrc, styleScope, maxWidth, minWidth, customContent } = settings;
-      const content = this._generatePopupContent(title, description, imgSrc, customContent);
+      const { title, description, imgSrc, styleScope, maxWidth, margin, minWidth, customContent } = settings;
+      const content = this._generatePopupContent(margin, title, description, imgSrc, customContent);
       const className = `map-popup-info ${styleScope||''}`
 
       this.initialize({ className, maxWidth, minWidth, customContent });
       this.setContent(content);
     }
 
-    _generatePopupContent(title, description, imgSrc, customContent = []) {
+    _generatePopupContent(margin, title, description, imgSrc, customContent = []) {
       const tmplFnIf = (fn, ...vals) =>
         vals.length && vals[0] !== undefined ? fn.call(this, ...vals) : '';
 
@@ -419,7 +425,7 @@
       }
 
       return `
-        <section class="map-box-info">
+        <section class="map-box-info" style="margin: ${margin};">
           ${tmplFnIf(imgTmpl, imgSrc)}
           <div class="map-box-info__content">
             ${
@@ -518,12 +524,12 @@
     // so hopefully it won't cause grief
     _createPopup(settings={}, config={}) {
       this.settings = settings;
-      const { title, data, styleScope, maxWidth, minWidth } = settings;
+      const { title, data, styleScope, margin, maxWidth, minWidth } = settings;
       const content = this._generatePopupContent(title, data);
 
       const className = `map-popup-data ${styleScope||''}`
 
-      this.initialize({ className, maxWidth, minWidth });
+      this.initialize({ className, margin, maxWidth, minWidth });
       this.setContent(content);
     }
 
