@@ -1,3 +1,8 @@
+v3.7.0
+===================
+## Enhancement:
+* Extend px-map-marker-group component to support numbered marker
+
 v3.6.0
 ===================
 ## New features:

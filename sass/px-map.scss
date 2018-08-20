@@ -146,6 +146,9 @@ $px-map-marker-locate-icon-accuracy-opacity:        var(--px-map-marker-locate-i
 // MAP ICON: SYMBOL
 @import "_map-icon-symbol.scss";
 
+// MAP ICON: CUSTOM
+@import "_map-icon-custom.scss";
+
 // MAP ICON: CLUSTER
 .map-icon-cluster {
   @extend %map-icon !optional;
@@ -441,7 +444,6 @@ $px-map-marker-locate-icon-accuracy-opacity:        var(--px-map-marker-locate-i
   /* stroke-dashoffset (duration and function) should match with leaflet-marker-icon transform in order to track it exactly */
   transition: stroke-dashoffset 0.3s ease-out, stroke-opacity 0.3s ease-in;
 }
-
 
 // Trumps
 @import "px-clearfix-design/_trumps.clearfix.scss";
