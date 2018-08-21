@@ -1,3 +1,4 @@
+
 /**
  * @license
  * Copyright (c) 2018, General Electric
@@ -15,7 +16,8 @@
  * limitations under the License.
  */
 
-(function() {
+
+(function () {
   'use strict';
 
   /****************************************************************************
@@ -27,7 +29,7 @@
 
   /**
    *
-   * @polymerBehavior PxMapBehavior.GeoJSONLayer
+   * @polymerBehavior PxMapBehavior.
    */
   PxMapBehavior.GeoJSONLayerImpl = {
     properties: {
@@ -77,6 +79,10 @@
        */
       featureStyle: {
         type: Object,
+        observer: 'shouldUpdateInst',
+      },
+      features: {
+        type: Array,
         observer: 'shouldUpdateInst'
       },
 
@@ -122,8 +128,8 @@
       const addedFn = this._handleFeatureAdded.bind(this);
       const removedFn = this._handleFeatureRemoved.bind(this);
       this.bindEvents({
-        'layeradd' : addedFn,
-        'layerremove' : removedFn
+        'layeradd': addedFn,
+        'layerremove': removedFn
       });
 
       // If any layers already added before events bound, manually fire layer
@@ -167,11 +173,11 @@
 
     _getStyle(featureProperties, attributeProperties) {
       return {
-        radius: featureProperties.radius           || attributeProperties.radius      || 5,
-        color: featureProperties.color             || attributeProperties.color       || '#3E87E8', //primary-blue,
-        fillColor: featureProperties.fillColor     || attributeProperties.fillColor   || '#88BDE6', //$dv-light-blue
-        weight: featureProperties.weight           || attributeProperties.weight      || 2,
-        opacity: featureProperties.opacity         || attributeProperties.opacity     || 1,
+        radius: featureProperties.radius || attributeProperties.radius || 5,
+        color: featureProperties.color || attributeProperties.color || '#3E87E8', //primary-blue,
+        fillColor: featureProperties.fillColor || attributeProperties.fillColor || '#88BDE6', //$dv-light-blue
+        weight: featureProperties.weight || attributeProperties.weight || 2,
+        opacity: featureProperties.opacity || attributeProperties.opacity || 1,
         fillOpacity: featureProperties.fillOpacity || attributeProperties.fillOpacity || 0.4
       };
     },
@@ -195,7 +201,7 @@
       const popup = new PxMap.DataPopup({
         title: 'Feature Properties',
         data: popupData,
-        autoPanPadding: [1,1]
+        autoPanPadding: [1, 1]
       });
 
       layer.bindPopup(popup);
@@ -298,11 +304,52 @@
      */
 
     _handleFeatureTapped(evt) {
+      // var geoData = this.data;
+      if (evt.target && evt.target.feature) {
+        var currentTargetId = evt.target.feature.id;
+      }
+      this.set('showFeatureProperties', 'false');
+      this.data.features.forEach(element => {
+        if (element.properties.style) {
+          delete element.properties.style;
+        }
+      });
+
+      var geoData = JSON.parse(JSON.stringify(this.data));
+      var objectToAppendWeight = {};
+      var objectToAppendColor = {};
+      var test;
+      geoData.features.map(featureObj => {
+        if (featureObj.id === currentTargetId) {
+          test = featureObj;
+        }
+      });
+
+      objectToAppendWeight = JSON.parse(JSON.stringify(test));
+      objectToAppendColor = JSON.parse(JSON.stringify(test));
+
+      objectToAppendWeight.properties.style = {
+        "weight": 5,
+        "opacity": 0.7,
+        "color": "#0c426f"
+      };
+
+      objectToAppendColor.properties.style = {
+        "weight": 1,
+        "opacity": 1,
+        "color": "white"
+      };
+
+      geoData.features.push(objectToAppendWeight);
+      geoData.features.push(objectToAppendColor);
+      this.set('showFeatureProperties', 'true');
+      this.set('data', { ...geoData });
+
       const detail = {};
       if (evt.target && evt.target.feature) {
         detail.feature = evt.target.feature;
       }
-      this.fire('px-map-layer-geojson-feature-tapped', detail);
+      this.fire('px-map-layer-geojson-feature-added', detail);
     },
     /**
      * Fired when a feature is tapped by the user.
@@ -336,6 +383,7 @@
       }
       this.fire('px-map-layer-geojson-feature-popup-closed', detail);
     }
+
     /**
      * Fired when a feature's popup is closed by the user.
      *
