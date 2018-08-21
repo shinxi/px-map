@@ -318,15 +318,15 @@
       var geoData = JSON.parse(JSON.stringify(this.data));
       var objectToAppendWeight = {};
       var objectToAppendColor = {};
-      var test;
-      geoData.features.map(featureObj => {
-        if (featureObj.id === currentTargetId) {
-          test = featureObj;
+      var featureObject;
+      geoData.features.map(obj => {
+        if (obj.id === currentTargetId) {
+          featureObject = obj;
         }
       });
 
-      objectToAppendWeight = JSON.parse(JSON.stringify(test));
-      objectToAppendColor = JSON.parse(JSON.stringify(test));
+      objectToAppendWeight = JSON.parse(JSON.stringify(featureObject));
+      objectToAppendColor = JSON.parse(JSON.stringify(featureObject));
 
       objectToAppendWeight.properties.style = {
         "weight": 5,
