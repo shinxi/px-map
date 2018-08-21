@@ -41,6 +41,9 @@
         value: false
       },
 
+      /**
+       * Margin of the marker popup container
+       */
       margin: {
         type: String,
         value: '15px'
