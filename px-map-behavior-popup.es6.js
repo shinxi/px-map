@@ -38,7 +38,16 @@
        */
       closeOnControlInteract: {
         type: Boolean,
-        value: false
+        value: false,
+      },
+
+      /**
+       * Html string in popup container. This one has higher priority than
+       * children element.
+       */
+      content: {
+        type: String,
+        value: null,
       },
 
       /**
@@ -46,7 +55,7 @@
        */
       margin: {
         type: String,
-        value: '15px'
+        value: '15px',
       },
 
       /**
@@ -123,6 +132,7 @@
     getInstOptions() {
       return {
         opened: this.opened,
+        content: this.content,
         margin: this.margin,
         minWidth: this.minWidth,
         maxWidth: this.maxWidth,
@@ -394,15 +404,15 @@
     _createPopup(settings={}) {
       // Assign settings and create content
       this.settings = settings;
-      const { title, description, imgSrc, styleScope, maxWidth, margin, minWidth, customContent } = settings;
-      const content = this._generatePopupContent(margin, title, description, imgSrc, customContent);
+      const { title, description, imgSrc, styleScope, content: htmlContent, maxWidth, margin, minWidth, customContent } = settings;
+      const content = this._generatePopupContent(margin, title, description, imgSrc, customContent, htmlContent);
       const className = `map-popup-info ${styleScope||''}`
 
       this.initialize({ className, maxWidth, minWidth, customContent });
       this.setContent(content);
     }
 
-    _generatePopupContent(margin, title, description, imgSrc, customContent = []) {
+    _generatePopupContent(margin, title, description, imgSrc, customContent = [], htmlContent) {
       const tmplFnIf = (fn, ...vals) =>
         vals.length && vals[0] !== undefined ? fn.call(this, ...vals) : '';
 
@@ -420,8 +430,9 @@
 
       const customContentArr = customContent.map(elem => elem.outerHTML);
       let customContentStr;
-
-      if (customContentArr.length > 1) {
+      if (htmlContent) {
+        customContentStr = htmlContent;
+      } else if (customContentArr.length > 1) {
         customContentStr = customContentArr.reduce((base, str) => base + str)
       } else {
         customContentStr = customContentArr[0]
