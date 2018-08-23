@@ -1,3 +1,7 @@
+v3.6.0
+===================
+## New features:
+* Add route Highlight ability when user clicks on a particular route. 
 v3.5.0
 ===================
 ## New features:
