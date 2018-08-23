@@ -404,7 +404,7 @@
     _createPopup(settings={}) {
       // Assign settings and create content
       this.settings = settings;
-      const { title, description, imgSrc, styleScope, content: htmlContent, maxWidth, margin, minWidth, customContent } = settings;
+      const { title, description, imgSrc, styleScope, content: htmlContent, maxWidth = 400, minWidth = 300, margin, customContent } = settings;
       const content = this._generatePopupContent(margin, title, description, imgSrc, customContent, htmlContent);
       const className = `map-popup-info ${styleScope||''}`
 
@@ -538,7 +538,7 @@
     // so hopefully it won't cause grief
     _createPopup(settings={}, config={}) {
       this.settings = settings;
-      const { title, data, styleScope, margin, maxWidth, minWidth } = settings;
+      const { title, data, styleScope, margin, maxWidth = 400, minWidth = 300 } = settings;
       const content = this._generatePopupContent(title, data);
 
       const className = `map-popup-data ${styleScope||''}`
