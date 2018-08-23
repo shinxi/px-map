@@ -394,7 +394,7 @@ describe('px-map with fit-to-markers enabled', function() {
       expect(callWithMin).to.eql(5); // should equal map.getMinZoom()
 
       var callWithMax = mapEl._getZoomLevelForFit(fakeBounds, 'max', fakeMap);
-      expect(callWithMax).to.eql(11); // should equal map.getBoundsZoom() - 1
+      expect(callWithMax).to.eql(10); // should equal map.getBoundsZoom() - 2
     });
 
     it('corretly sets its view', function() {

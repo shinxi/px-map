@@ -42,6 +42,14 @@
       },
 
       /**
+       * Margin of the marker popup container
+       */
+      margin: {
+        type: String,
+        value: '15px'
+      },
+
+      /**
        * Max width of popup container
        */
       maxWidth: {
@@ -115,6 +123,7 @@
     getInstOptions() {
       return {
         opened: this.opened,
+        margin: this.margin,
         minWidth: this.minWidth,
         maxWidth: this.maxWidth,
       };
@@ -210,7 +219,8 @@
         title: this.title,
         description: this.description,
         imgSrc: this.imgSrc,
-        styleScope: this.isShadyScoped() ? this.getShadyScope() : undefined
+        styleScope: this.isShadyScoped() ? this.getShadyScope() : undefined,
+        customContent: this.getEffectiveChildren(),
       });
     }
   };
@@ -384,36 +394,49 @@
     _createPopup(settings={}) {
       // Assign settings and create content
       this.settings = settings;
-      const { title, description, imgSrc, styleScope, maxWidth, minWidth } = settings;
-      const content = this._generatePopupContent(title, description, imgSrc);
+      const { title, description, imgSrc, styleScope, maxWidth, margin, minWidth, customContent } = settings;
+      const content = this._generatePopupContent(margin, title, description, imgSrc, customContent);
       const className = `map-popup-info ${styleScope||''}`
 
-      this.initialize({ className, maxWidth, minWidth });
+      this.initialize({ className, maxWidth, minWidth, customContent });
       this.setContent(content);
     }
 
-    _generatePopupContent(title, description, imgSrc) {
-      let tmplFnIf = (fn, ...vals) =>
+    _generatePopupContent(margin, title, description, imgSrc, customContent = []) {
+      const tmplFnIf = (fn, ...vals) =>
         vals.length && vals[0] !== undefined ? fn.call(this, ...vals) : '';
 
-      let imgTmpl = (imgSrc) => `
+      const imgTmpl = (imgSrc) => `
         <div class="map-box-info__image">
           <img src="${imgSrc}" />
         </div>
       `;
-      let titleTmpl = (title) => `
+      const titleTmpl = (title) => `
         <p class="map-box-info__title">${title}</p>
       `;
-      let descriptionTmpl = (description) => `
+      const descriptionTmpl = (description) => `
         <p class="map-box-info__description">${description}</p>
       `;
 
+      const customContentArr = customContent.map(elem => elem.outerHTML);
+      let customContentStr;
+
+      if (customContentArr.length > 1) {
+        customContentStr = customContentArr.reduce((base, str) => base + str)
+      } else {
+        customContentStr = customContentArr[0]
+      }
+
       return `
-        <section class="map-box-info">
+        <section class="map-box-info" style="margin: ${margin};">
           ${tmplFnIf(imgTmpl, imgSrc)}
           <div class="map-box-info__content">
-            ${tmplFnIf(titleTmpl, title)}
-            ${tmplFnIf(descriptionTmpl, description)}
+            ${
+              title || description
+                ? tmplFnIf(titleTmpl, title) +
+                  tmplFnIf(descriptionTmpl, description)
+                : customContentStr
+            }
           </div>
         </section>
       `;
@@ -421,8 +444,9 @@
 
     updateSettings(settings={}) {
       Object.assign(this.settings, settings);
-      const { title, description, imgSrc, styleScope } = this.settings;
-      const content = this._generatePopupContent(title, description, imgSrc);
+
+      const { title, description, imgSrc, customContent, styleScope } = this.settings;
+      const content = this._generatePopupContent(title, description, imgSrc, customContent);
 
       this.setContent(content);
       this.update();
@@ -503,12 +527,12 @@
     // so hopefully it won't cause grief
     _createPopup(settings={}, config={}) {
       this.settings = settings;
-      const { title, data, styleScope, maxWidth, minWidth } = settings;
+      const { title, data, styleScope, margin, maxWidth, minWidth } = settings;
       const content = this._generatePopupContent(title, data);
 
       const className = `map-popup-data ${styleScope||''}`
 
-      this.initialize({ className, maxWidth, minWidth });
+      this.initialize({ className, margin, maxWidth, minWidth });
       this.setContent(content);
     }
 

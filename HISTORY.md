@@ -1,8 +1,23 @@
-v3.6.0
-===================
 ## New features:
 * Add route Highlight ability when user clicks on a particular route. 
 v3.5.0
+=======
+v3.7.0
+===================
+## Enhancement:
+* Extend px-map-marker-group component to support numbered marker
+
+v3.6.0
+===================
+## New features:
+* Add custom HTML support for popup info. See `demo/px-map-popup-info-demo.html`.
+
+v3.5.2
+===================
+## Bug fixes:
+* Increment offset to getBoundsZoom() to fix fitToMarkers attribute of px-map doesn't work
+
+v3.5.1
 ===================
 ## New features:
 * Add `maxWidth` (Defaults to 400) and `minWidth` (Defaults to 300) property to

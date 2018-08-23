@@ -237,7 +237,7 @@
         return zoom;
       }
       if (fitSetting === 'max') {
-        let zoom = map.getBoundsZoom(bounds, true) - 1;
+        let zoom = map.getBoundsZoom(bounds, true) - 2;
         return zoom;
       }
     },

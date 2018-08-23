@@ -47,6 +47,13 @@ describe('PxMap.InfoPopup class', function () {
     expect(content).to.include(DESCRIPTION_TEXT);
   });
 
+  it('constructor generates popup HTML with custom HTML', function() {
+    var mockDomList = [{ outerHTML: '<p>content</p>' }]
+    var popup = new PxMap.InfoPopup({ customContent: mockDomList });
+    var content = popup.getContent();
+    expect(content).to.include('<p>content</p>');
+  });
+
   it('constructor generates popup HTML with only an image link', function() {
     var IMG_LINK = 'https://test.test/foo.png';
     var popup = new PxMap.InfoPopup({ imgSrc: IMG_LINK });
