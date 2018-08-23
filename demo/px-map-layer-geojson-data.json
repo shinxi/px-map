@@ -4,31 +4,11 @@
     {
       "type": "Feature",
       "id": "swrefVrecordVdatasetZelectricVcollectionZed_poleVkeysZ313462",
-      "properties": {
-        "External Name": "Pole",
-        "Status": "Existing",
-        "Usage": "Primary",
-        "Number": "unset",
-        "Owner Type": "Company Owned",
-        "Owner Name": "Electric Utility",
-        "Asset ID": "unset",
-        "Date Installed": "unset",
-        "Material": "Wood",
-        "Location Description": "unset",
-        "Remarks": "unset",
-        "Pole Structure": "unset",
-        "Type": "unset",
-        "Height": "40 Feet",
-        "Frame Type": "unset",
-        "Class": "0",
-        "Treatment": "Creosote",
-        "Reinforcement Type": "unset",
-        "Receptacle": "unset",
-        "Reduced Level": "unset",
-        "Strength": "",
-        "Depth": "unset",
-        "Date Manufactured": "unset",
-        "Date Removed": "unset"
+      "customPopup": {
+        "minWidth": 300,
+        "maxWidth": 400,
+        "margin": "0 15px",
+        "content": "<p>Custom content</p>"
       },
       "geometry": {
         "type": "Point",

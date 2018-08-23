@@ -145,7 +145,7 @@
 
       const geojsonLayer = L.geoJson(options.data, {
         pointToLayer: (feature, latlng) => {
-          const featureProperties = feature.properties.style || {};
+          const featureProperties = feature.properties && feature.properties.style || {};
           const attributeProperties = options.featureStyle;
           const style = this._getStyle(feature, featureProperties, attributeProperties);
 
@@ -158,7 +158,7 @@
         },
 
         style: (feature) => {
-          const featureProperties = feature.properties.style || {};
+          const featureProperties = feature.properties && feature.properties.style || {};
 
           return this._getStyle(featureProperties, styleAttributeProperties);
         }
@@ -184,6 +184,13 @@
     },
 
     _bindPopup(feature, layer) {
+      const customPopup = feature.customPopup;
+
+      if (customPopup) {
+        const popup = new PxMap.InfoPopup({ ...customPopup });
+        return layer.bindPopup(popup);
+      }
+
       // Filter keys to remove info that should not be displayed in a popup.
       // If no keys remain, do not bind a popup.
       const popupDataKeys = Object.keys(feature.properties).filter(key => feature.properties.hasOwnProperty(key) && feature.properties[key] !== 'unset' && key !== 'style');
