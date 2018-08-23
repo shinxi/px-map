@@ -1,8 +1,6 @@
 ## New features:
 * Add route Highlight ability when user clicks on a particular route. 
-v3.5.0
-=======
-v3.7.0
+v3.9.0
 ===================
 ## Enhancement:
 * Extend px-map-marker-group component to support numbered marker
