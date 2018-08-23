@@ -10,6 +10,7 @@ v3.9.0
 * Add route highlight when user clicks on a particular route
 
 v3.8.0
+===================
 ## Enhancement:
 * Add `margin` property to `px-map-popup-info`
 
