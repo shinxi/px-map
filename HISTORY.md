@@ -1,3 +1,14 @@
+v3.9.0
+===================
+## Enhancement:
+* Add `content` property to `px-map-popup-info`
+* Add `customPopup` key to layer geojson to allow custom popup. See `demo/px-map-layer-geojson-data.json`.
+
+v3.8.0
+===================
+## Enhancement:
+* Add `margin` property to `px-map-popup-info`
+
 v3.7.0
 ===================
 ## Enhancement:

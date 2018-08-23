@@ -77,7 +77,13 @@ describe('px-map-layer-geojson', function () {
   });
 
   it('adds data to the map through JavaScript property changes (via `set()`)', function(done) {
-    var dataObject = {"type": "FeatureCollection", "features": [{"type": "Feature","properties": {},"geometry": {"type": "Point","coordinates": [0.11278152465820314,52.23526420307733]}}]};
+    var dataObject = {
+      "type": "FeatureCollection",
+      "features": [
+        {"type": "Feature","properties": {},"geometry": {"type": "Point","coordinates": [0.11278152465820314,52.23526420307733]}},
+        {"type": "Feature","customPopup": { "content": "<p>Custom</p>" },"geometry": {"type": "Point","coordinates": [0.11278152465820314,52.23526420307733]}}
+      ]
+    };
     var geoJSONLayer = noAttributesFixture.querySelector('px-map-layer-geojson');
     geoJSONLayer.set('data', dataObject);
 
@@ -85,11 +91,13 @@ describe('px-map-layer-geojson', function () {
       var geoJSONLayerInstance = geoJSONLayer.elementInst;
       var geoJSONLayerOptions = geoJSONLayer.getInstOptions();
       var drawnFeature = geoJSONLayerInstance.getLayers()[0].feature;
+      var drawnFeature1 = geoJSONLayerInstance.getLayers()[1].feature;
 
       expect(geoJSONLayerOptions).to.be.an('object');
       expect(geoJSONLayerOptions).to.have.property('data');
       expect(geoJSONLayerOptions.data).to.deep.equal(dataObject);
       expect(drawnFeature).to.deep.equal(dataObject.features[0]);
+      expect(drawnFeature1).to.deep.equal(dataObject.features[1]);
       done();
     }, 1);
   });
