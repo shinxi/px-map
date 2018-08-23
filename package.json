@@ -38,7 +38,5 @@
     "build": "./scripts/build.sh"
   },
   "license": "Apache-2.0",
-  "dependencies": {
-    "leaflet-multi-style": "^1.1.1"
-  }
+  "dependencies": {}
 }

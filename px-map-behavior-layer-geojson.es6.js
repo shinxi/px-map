@@ -81,10 +81,6 @@
         type: Object,
         observer: 'shouldUpdateInst',
       },
-      features: {
-        type: Array,
-        observer: 'shouldUpdateInst'
-      },
 
       /**
        * If set, a popup containing a feature's properties will be opened when
@@ -349,7 +345,7 @@
       if (evt.target && evt.target.feature) {
         detail.feature = evt.target.feature;
       }
-      this.fire('px-map-layer-geojson-feature-added', detail);
+      this.fire('px-map-layer-geojson-feature-tapped', detail);
     },
     /**
      * Fired when a feature is tapped by the user.
