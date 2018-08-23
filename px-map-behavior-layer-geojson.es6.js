@@ -253,6 +253,38 @@
       };
     },
 
+    highlightSelectedFeature(data, currentTargetId) {
+      var geoData = JSON.parse(JSON.stringify(data));
+      var objectToAppendWeight = {};
+      var objectToAppendColor = {};
+      var featureObject;
+      geoData.features.map(obj => {
+        if (obj.id === currentTargetId) {
+          featureObject = obj;
+        }
+      });
+
+      objectToAppendWeight = JSON.parse(JSON.stringify(featureObject));
+      objectToAppendColor = JSON.parse(JSON.stringify(featureObject));
+
+      objectToAppendWeight.properties.style = {
+        "weight": 5,
+        "opacity": 0.7,
+        "color": "#0c426f"
+      };
+
+      objectToAppendColor.properties.style = {
+        "weight": 1,
+        "opacity": 1,
+        "color": "white"
+      };
+
+      geoData.features.push(objectToAppendWeight);
+      geoData.features.push(objectToAppendColor);
+
+      return geoData;
+    },
+
     _handleFeatureAdded(evt) {
       if (!evt || !evt.layer) return;
 
@@ -311,33 +343,8 @@
         }
       });
 
-      var geoData = JSON.parse(JSON.stringify(this.data));
-      var objectToAppendWeight = {};
-      var objectToAppendColor = {};
-      var featureObject;
-      geoData.features.map(obj => {
-        if (obj.id === currentTargetId) {
-          featureObject = obj;
-        }
-      });
+      var geoData = this.highlightSelectedFeature(this.data, currentTargetId);
 
-      objectToAppendWeight = JSON.parse(JSON.stringify(featureObject));
-      objectToAppendColor = JSON.parse(JSON.stringify(featureObject));
-
-      objectToAppendWeight.properties.style = {
-        "weight": 5,
-        "opacity": 0.7,
-        "color": "#0c426f"
-      };
-
-      objectToAppendColor.properties.style = {
-        "weight": 1,
-        "opacity": 1,
-        "color": "white"
-      };
-
-      geoData.features.push(objectToAppendWeight);
-      geoData.features.push(objectToAppendColor);
       this.set('showFeatureProperties', 'true');
       this.set('data', { ...geoData });
 
