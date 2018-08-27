@@ -1,8 +1,14 @@
+v3.11.0
+===================
+## Enhancement:
+* Extend `px-marker-group` for Individual Pin Highlight and to open popup programmatically.
+* Add `lat/lng` and `opened` property to `px-marker-group`.
+* Add `lat/lng` and `zoom` property to `px-map`.
+
 v3.10.3
 ===================
 ## Enhancement:
 * Send the LatLong data out, so the users get the lat long of the point clicked
-
 
 v3.10.1
 ===================

@@ -36,21 +36,42 @@ limitations under the License.
       display: flex;
       height: 100vh;
     }
+    .nav-link {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: white;
+      z-index: 999;
+    }
+    .nav-link ul {
+      padding: 0;
+      margin: 20px;
+    }
+    .nav-link ul li {
+      list-style-type: none;
+      padding: 5px 0;
+    }
   </style>
 </head>
 <body>
   <section class="wrap">
     <dom-bind>
       <template is="dom-bind">
-        <px-map fit-to-markers flex-to-size on-px-map-moved="mapMove">
+        <px-map id="pxMap" flex-to-size on-px-map-moved="mapMove">
           <px-map-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"></px-map-tile-layer>
           <px-map-control-zoom position="bottomright"></px-map-control-zoom>
 
           <!-- Data-bind the output of the iron-ajax call `geoJSON` to the marker group's `data` attribute -->
-          <px-map-marker-group name="Places" data="{{geoJSON}}"></px-map-marker-group>
+          <px-map-marker-group id="pxMarkerGroup" name="Places" data="{{geoJSON}}"></px-map-marker-group>
         </px-map>
       </template>
     </dom-bind>
+  </section>
+  <section class="nav-link">
+    <ul>
+      <li><button id="markerOne">Marker One</button></li>
+      <li><button id="markerTwo">Marker Two</button></li>
+    </ul>
   </section>
   <script>
     var tmplQuery = Polymer.Element ? 'dom-bind' : 'template[is=dom-bind]';
@@ -683,6 +704,36 @@ limitations under the License.
         console.log('There are ' + markers.length + ' markers visible on the map.');
       }
       tmpl.geoJSON = featCollection;
+
+      // pass-in lat/lng and zoom prop to px-map to navigate item clicked
+      // pass-in lat/lng, opened prop to px-marker-group to compare and select feature clicked
+      // track if popup opened
+      var pxMap = document.getElementById('pxMap');
+      var pxMarkerGroup = document.getElementById('pxMarkerGroup');
+      document.getElementById('markerOne').addEventListener('click', function() {
+        const [LNG, LAT] = featCollection.features[0].geometry.coordinates;
+        const { id } = featCollection.features[0];
+        pxMap.lat = LAT;
+        pxMap.lng = LNG;
+        pxMap.zoom = 17; //single marker centered to map
+
+        pxMarkerGroup.lat = LAT;
+        pxMarkerGroup.lng = LNG;
+        pxMarkerGroup.opened = id;
+      });
+
+      document.getElementById('markerTwo').addEventListener('click', function() {
+        const [LNG, LAT] = featCollection.features[1].geometry.coordinates;
+        const { id } = featCollection.features[1];
+        pxMap.lat = LAT;
+        pxMap.lng = LNG;
+        pxMap.zoom = 17; //single marker centered to map
+
+        pxMarkerGroup.lat = LAT;
+        pxMarkerGroup.lng = LNG;
+        pxMarkerGroup.opened = id;
+      });
+
     });
   </script>
 </body>
