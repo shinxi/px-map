@@ -187,7 +187,7 @@
       const customPopup = feature.customPopup;
 
       if (customPopup) {
-        const popup = new PxMap.InfoPopup({ ...customPopup });
+        const popup = new PxMap.InfoPopup(customPopup);
         return layer.bindPopup(popup);
       }
 
