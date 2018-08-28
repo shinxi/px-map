@@ -346,7 +346,7 @@
       var geoData = this.highlightSelectedFeature(this.data, currentTargetId);
 
       this.set('showFeatureProperties', 'true');
-      this.set('data', { ...geoData });
+      this.set('data', JSON.parse(JSON.stringify(geoData)));
 
       const detail = {};
       if (evt.target && evt.target.feature) {
