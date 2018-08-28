@@ -1,7 +1,8 @@
-v3.10.2
+v3.10.3
 ===================
 ## Enhancement:
-* Remove the use of spread operator for route highlight geoData
+* Send the LatLong data out, so the users get the lat long of the point clicked
+
 
 v3.10.1
 ===================
