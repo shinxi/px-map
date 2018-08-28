@@ -1,3 +1,13 @@
+v3.10.2
+===================
+## Enhancement:
+* Remove the use of spread operator for route highlight geoData
+
+v3.10.1
+===================
+## Enhancement:
+* Remove the use of spread operator for popover content.
+
 v3.10.0
 ===================
 ## Enhancement:
