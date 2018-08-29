@@ -18,11 +18,9 @@
 
 
 (function () {
-  'use strict';
-
-  /****************************************************************************
+  /** **************************************************************************
    * BEHAVIORS
-   ****************************************************************************/
+   *************************************************************************** */
 
   /* Ensures the behavior namespace is created */
   window.PxMapBehavior = (window.PxMapBehavior || {});
@@ -51,7 +49,7 @@
        */
       data: {
         type: Object,
-        observer: 'shouldUpdateInst'
+        observer: 'shouldUpdateInst',
       },
 
       /**
@@ -96,8 +94,8 @@
       showFeatureProperties: {
         type: Boolean,
         value: false,
-        observer: 'shouldUpdateInst'
-      }
+        observer: 'shouldUpdateInst',
+      },
     },
 
     /**
@@ -124,15 +122,15 @@
       const addedFn = this._handleFeatureAdded.bind(this);
       const removedFn = this._handleFeatureRemoved.bind(this);
       this.bindEvents({
-        'layeradd': addedFn,
-        'layerremove': removedFn
+        layeradd: addedFn,
+        layerremove: removedFn,
       });
 
       // If any layers already added before events bound, manually fire layer
       // added events to attach listeners/notify the world the layer is added
       if (this.elementInst.getLayers().length !== 0) {
         this.elementInst.eachLayer((layer) => {
-          this.elementInst.fire('layeradd', { layer: layer });
+          this.elementInst.fire('layeradd', { layer });
         });
       }
 
@@ -161,7 +159,7 @@
           const featureProperties = feature.properties && feature.properties.style || {};
 
           return this._getStyle(featureProperties, styleAttributeProperties);
-        }
+        },
       });
 
       return geojsonLayer;
@@ -170,17 +168,17 @@
     _getStyle(featureProperties, attributeProperties) {
       return {
         radius: featureProperties.radius || attributeProperties.radius || 5,
-        color: featureProperties.color || attributeProperties.color || '#3E87E8', //primary-blue,
-        fillColor: featureProperties.fillColor || attributeProperties.fillColor || '#88BDE6', //$dv-light-blue
+        color: featureProperties.color || attributeProperties.color || '#3E87E8', // primary-blue,
+        fillColor: featureProperties.fillColor || attributeProperties.fillColor || '#88BDE6', // $dv-light-blue
         weight: featureProperties.weight || attributeProperties.weight || 2,
         opacity: featureProperties.opacity || attributeProperties.opacity || 1,
-        fillOpacity: featureProperties.fillOpacity || attributeProperties.fillOpacity || 0.4
+        fillOpacity: featureProperties.fillOpacity || attributeProperties.fillOpacity || 0.4,
       };
     },
 
     _bindFeaturePopups() {
       if (!this.elementInst) return;
-      this.elementInst.eachLayer((layer) => this._bindPopup(layer.feature, layer));
+      this.elementInst.eachLayer(layer => this._bindPopup(layer.feature, layer));
     },
 
     _bindPopup(feature, layer) {
@@ -204,7 +202,7 @@
       const popup = new PxMap.DataPopup({
         title: 'Feature Properties',
         data: popupData,
-        autoPanPadding: [1, 1]
+        autoPanPadding: [1, 1],
       });
 
       layer.bindPopup(popup);
@@ -212,7 +210,7 @@
 
     _unbindFeaturePopups() {
       if (!this.elementInst) return;
-      this.elementInst.eachLayer((layer) => this._unbindPopup(layer));
+      this.elementInst.eachLayer(layer => this._unbindPopup(layer));
     },
 
     _unbindPopup(layer) {
@@ -229,8 +227,7 @@
     updateInst(lastOptions, nextOptions) {
       if (!Object.keys(nextOptions.data).length) {
         this.elementInst.clearLayers();
-      }
-      else if (Object.keys(nextOptions.data).length && (lastOptions.dataHash !== nextOptions.dataHash || lastOptions.featureStyleHash !== nextOptions.featureStyleHash)) {
+      } else if (Object.keys(nextOptions.data).length && (lastOptions.dataHash !== nextOptions.dataHash || lastOptions.featureStyleHash !== nextOptions.featureStyleHash)) {
         const styleAttributeProperties = this.getInstOptions().featureStyle;
 
         this.elementInst.clearLayers();
@@ -243,8 +240,7 @@
         if (nextOptions.showFeatureProperties) {
           this._bindFeaturePopups();
         }
-      }
-      else if (lastOptions.showFeatureProperties !== nextOptions.showFeatureProperties) {
+      } else if (lastOptions.showFeatureProperties !== nextOptions.showFeatureProperties) {
         if (nextOptions.showFeatureProperties) this._bindFeaturePopups();
         if (!nextOptions.showFeatureProperties) this._unbindFeaturePopups();
       }
@@ -256,16 +252,16 @@
         dataHash: JSON.stringify(this.data || {}),
         featureStyle: this.featureStyle || {},
         featureStyleHash: JSON.stringify(this.featureStyle || {}),
-        showFeatureProperties: this.showFeatureProperties
+        showFeatureProperties: this.showFeatureProperties,
       };
     },
 
     highlightSelectedFeature(data, currentTargetId) {
-      var geoData = JSON.parse(JSON.stringify(data));
-      var objectToAppendWeight = {};
-      var objectToAppendColor = {};
-      var featureObject;
-      geoData.features.map(obj => {
+      const geoData = JSON.parse(JSON.stringify(data));
+      let objectToAppendWeight = {};
+      let objectToAppendColor = {};
+      let featureObject;
+      geoData.features.map((obj) => {
         if (obj.id === currentTargetId) {
           featureObject = obj;
         }
@@ -275,15 +271,15 @@
       objectToAppendColor = JSON.parse(JSON.stringify(featureObject));
 
       objectToAppendWeight.properties.style = {
-        "weight": 5,
-        "opacity": 0.7,
-        "color": "#0c426f"
+        weight: 5,
+        opacity: 0.7,
+        color: '#0c426f',
       };
 
       objectToAppendColor.properties.style = {
-        "weight": 1,
-        "opacity": 1,
-        "color": "white"
+        weight: 1,
+        opacity: 1,
+        color: 'white',
       };
 
       geoData.features.push(objectToAppendWeight);
@@ -339,25 +335,25 @@
      */
 
     _handleFeatureTapped(evt) {
-      // var geoData = this.data;
       if (evt.target && evt.target.feature) {
         var currentTargetId = evt.target.feature.id;
       }
       this.set('showFeatureProperties', 'false');
-      this.data.features.forEach(element => {
+      this.data.features.forEach((element) => {
         if (element.properties.style) {
           delete element.properties.style;
         }
       });
 
-      var geoData = this.highlightSelectedFeature(this.data, currentTargetId);
-
+      const geoData = this.highlightSelectedFeature(this.data, currentTargetId);
       this.set('showFeatureProperties', 'true');
       this.set('data', JSON.parse(JSON.stringify(geoData)));
 
       const detail = {};
       if (evt.target && evt.target.feature) {
         detail.feature = evt.target.feature;
+        detail.latlng = evt.latlng;
+        detail.routeSegmentId = currentTargetId;
       }
       this.fire('px-map-layer-geojson-feature-tapped', detail);
     },
@@ -392,7 +388,7 @@
         detail.feature = evt.target.feature;
       }
       this.fire('px-map-layer-geojson-feature-popup-closed', detail);
-    }
+    },
 
     /**
      * Fired when a feature's popup is closed by the user.
@@ -407,6 +403,6 @@
   /** @polymerBehavior */
   PxMapBehavior.GeoJSONLayer = [
     PxMapBehavior.Layer,
-    PxMapBehavior.GeoJSONLayerImpl
+    PxMapBehavior.GeoJSONLayerImpl,
   ];
-})();
+}());
