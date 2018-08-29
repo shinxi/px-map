@@ -926,14 +926,16 @@
       if (!marker || !marker.bindPopup || !marker.openPopup) return;
 
       const popupSettings = this._featSettingsToProps(marker.featureProperties['marker-popup'], 'popup');
+      popupSettings.autoOpenPopup = autoOpenPopup;
       if (!popupSettings || !Object.keys(popupSettings).length) return;
 
       const klassName = (popupSettings._Base && PxMap.hasOwnProperty(popupSettings._Base)) ? popupSettings._Base : 'InfoPopup';
       const popup = new PxMap[klassName](popupSettings);
       const {lat, lng} = marker._latlng;
+      const popupOptions = JSON.parse(JSON.stringify(popup.options));
       const pxMapEl = document.getElementsByTagName('px-map')[0]; // considering there is always single instance of px-map
       autoOpenPopup ? // automatically open popup of selected marker
-      L.popup({...popup.options})
+      L.popup(popupOptions)
       .setLatLng([lat, lng])
       .setContent(popup._content)
       .openOn(pxMapEl.elementInst) :
