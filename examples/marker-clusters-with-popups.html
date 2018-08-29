@@ -713,6 +713,7 @@ limitations under the License.
       document.getElementById('markerOne').addEventListener('click', function() {
         const [LNG, LAT] = featCollection.features[0].geometry.coordinates;
         const { id } = featCollection.features[0];
+        if(!LAT || !LNG) return;
         pxMap.lat = LAT;
         pxMap.lng = LNG;
         pxMap.zoom = 17; //single marker centered to map
@@ -725,6 +726,7 @@ limitations under the License.
       document.getElementById('markerTwo').addEventListener('click', function() {
         const [LNG, LAT] = featCollection.features[1].geometry.coordinates;
         const { id } = featCollection.features[1];
+        if(!LAT || !LNG) return;
         pxMap.lat = LAT;
         pxMap.lng = LNG;
         pxMap.zoom = 17; //single marker centered to map
