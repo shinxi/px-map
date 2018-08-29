@@ -353,6 +353,7 @@
       if (evt.target && evt.target.feature) {
         detail.feature = evt.target.feature;
         detail.latlng = evt.latlng;
+        detail.routeSegmentId = currentTargetId;
       }
       this.fire('px-map-layer-geojson-feature-tapped', detail);
     },
