@@ -183,7 +183,55 @@
        */
       clusterConfig: {
         type: Object
-      }
+      },
+
+      /**
+       * Programatically opens and closes the popup. Is updated when the popup
+       * is opened by the user through DOM interaction.
+       */
+      opened: {
+        type: String,
+        value: null,
+        observer: 'shouldUpdateInst',
+        notify: true
+      },
+
+      /**
+       * The latitude of the active map center. Can be used to set or update
+       * the center of the map, or read from after the user moves the map to
+       * get updated coordinates.
+       *
+       * @type {Number}
+       */
+      lat: {
+        type: Number,
+        value: null,
+      },
+
+      /**
+       * The longitude of the active map center. Can be used to set or update
+       * the center of the map, or read from after the user moves the map to
+       * get updated coordinates.
+       *
+       * @type {Number}
+       */
+      lng: {
+        type: Number,
+        value: null,
+      },
+
+      /**
+       * The zoom level of the active map. Can be used to set or update
+       * the zoom level of the map, or read from after the user changes the
+       * map zoom level to an updated value.
+       *
+       * @type {Number}
+       */
+      zoom: {
+        type: Number,
+        value: 10,
+      },
+
     },
 
     // PUBLIC METHODS
@@ -270,6 +318,26 @@
         const features = this._syncDataWithMarkers(nextOptions.data.features, this.elementInst);
         this._notifyNewFeatures(features);
       }
+
+      // automatically open popup if marker-group element has opened prop
+      if (lastOptions.opened !== nextOptions.opened) {
+        if (nextOptions.opened && !this.elementInst.isPopupOpen()) {
+          const nextOptionsData = nextOptions.data;
+          if (nextOptionsData && nextOptionsData.features.length) {
+            // find if selected item exists
+            const selectedFeature = nextOptionsData.features.find(feature => feature.id === nextOptions.opened);
+            // if selectedFeature hasPopup
+            const hasFeaturePopup = selectedFeature && selectedFeature.properties.hasOwnProperty('marker-popup');
+            if(hasFeaturePopup) {
+              // run it by _createMarker, so the marker inherits bindPopup and openPopup methods
+              // hand it over to _bindAndOpenPopup with marker
+              const marker = this._createMarker(selectedFeature);
+              this._bindAndOpenPopup(marker, true);
+            }
+          };
+        }
+      }
+
     },
 
     getInstOptions() {
@@ -291,8 +359,14 @@
       const options = Object.assign(defaultOptions, (this.clusterConfig || {}));
       // Assign the `data` and `iconCreateFunction` options. These cannot be
       // configured through the `clusterConfig` attribture
+      // get opened uuid prop for popup
       options.data = this._getValidData();
       options.iconCreateFunction = this._createClusterIcon.bind(this);
+
+      options.opened = this.opened;
+      options.lat = this.lat;
+      options.lng = this.lng;
+      options.zoom = this.zoom;
       // Return the options composed together
       return options;
     },
@@ -848,16 +922,24 @@
      * @event px-map-marker-group-cluster-tapped
      */
 
-    _bindAndOpenPopup(marker) {
+    _bindAndOpenPopup(marker, autoOpenPopup=false) {
       if (!marker || !marker.bindPopup || !marker.openPopup) return;
 
       const popupSettings = this._featSettingsToProps(marker.featureProperties['marker-popup'], 'popup');
+      popupSettings.autoOpenPopup = autoOpenPopup;
       if (!popupSettings || !Object.keys(popupSettings).length) return;
 
       const klassName = (popupSettings._Base && PxMap.hasOwnProperty(popupSettings._Base)) ? popupSettings._Base : 'InfoPopup';
       const popup = new PxMap[klassName](popupSettings);
-
-      marker.bindPopup(popup).openPopup();
+      const {lat, lng} = marker._latlng;
+      const popupOptions = JSON.parse(JSON.stringify(popup.options));
+      const pxMapEl = document.getElementsByTagName('px-map')[0]; // considering there is always single instance of px-map
+      autoOpenPopup ? // automatically open popup of selected marker
+      L.popup(popupOptions)
+      .setLatLng([lat, lng])
+      .setContent(popup._content)
+      .openOn(pxMapEl.elementInst) :
+      marker.bindPopup(popup).openPopup(); // single markerTap open popup
       marker.__boundCloseFn = this._unbindAndClosePopup.bind(this, marker);
       marker.on('popupclose', marker.__boundCloseFn);
     },
