@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-(function() {
+(function () {
   'use strict';
 
   /****************************************************************************
@@ -282,7 +282,7 @@
       // For each path, generate a `<path>` tag with the correct attributes
       const pathTmpl = (pathData, pathIndex) =>
         `<path d="${arcPathGeneratorFn(pathData)}" fill="${
-          colorsArray[pathIndex]
+        colorsArray[pathIndex]
         }" opacity="1"></path>`;
 
       return `
@@ -316,6 +316,8 @@
         strokeColor,
         fillColor,
         content,
+        optionsFillColor,
+        optionsStrokeColor,
         options: {
           icon,
           strokeColor: iconStrokeColor,
@@ -328,7 +330,7 @@
         iconVal = `<span class="map-icon-custom__body">${content}</span> `;
       } else {
         iconVal =
-        `<px-icon class="map-icon-custom__body content-icon" icon="${content}"></px-icon>`;
+          `<px-icon class="map-icon-custom__body content-icon" icon="${content}" style="fill:${optionsFillColor}; stroke:${optionsStrokeColor};"></px-icon>`;
       }
 
       // Custom template
