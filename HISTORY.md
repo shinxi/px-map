@@ -1,4 +1,8 @@
-v3.11.0
+v3.12.0
+===================
+## Enhancement:
+* Make The custom icon content's fill and stroke configurable.
+* Add the demo for the same.
 ===================
 ## Enhancement:
 * Extend `px-marker-group` for Individual Pin Highlight and to open popup programmatically.
