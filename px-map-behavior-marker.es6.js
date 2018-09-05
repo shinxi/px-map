@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-(function() {
+(function () {
   'use strict';
 
   /****************************************************************************
@@ -122,11 +122,11 @@
       const mouseOverFn = this._handleMarkerMouseOver.bind(this);
       const mouseOutFn = this._handleMarkerMouseOut.bind(this);
       this.bindEvents({
-        'add' : addedFn,
-        'remove' : removedFn,
-        'click' : tapFn,
-        'mouseover' : mouseOverFn,
-        'mouseout' : mouseOutFn
+        'add': addedFn,
+        'remove': removedFn,
+        'click': tapFn,
+        'mouseover': mouseOverFn,
+        'mouseout': mouseOutFn
       }, this.marker);
 
       // Now call layer's add
@@ -329,12 +329,118 @@
      * @event px-map-marker-mouse-out
      */
   };
+
+  PxMapBehavior.CustomMarkerImpl = {
+    properties: {
+      /**
+       * Name of the px-icon to use for the marker.
+       */
+      icon: String,
+      /*
+       * Color for the icon stroke
+       */
+      strokeColor: {
+        type: String,
+        value: 'black'
+      },
+      /**
+       * Color for the icon fill
+       */
+      fillColor: {
+        type: String,
+        value: 'transparent'
+      },
+      /**
+      * Value inside string
+      */
+      iconContent: {
+        type: String,
+        value: '1'
+      },
+      /**
+      * Inner icon fill
+      */
+      iconFillColor: {
+        type: String,
+        value: 'blue'
+      },
+      /**
+
+      /**
+     * Inner icon stroke
+     */
+      iconStrokeColor: {
+        type: String,
+        value: 'grey'
+      }
+
+    },
+
+    observers: [
+      'shouldUpdateInst(icon)',
+      '_updateMarkerIcon(icon)'
+    ],
+
+    /**
+     * The map won't render the marker until the first time this function returns
+     * `true`. The function will be called by this element's parent every time
+     * one of its properties changes until it returns `true`.
+     */
+    canAddInst() {
+      return PxMapBehavior.MarkerImpl.canAddInst.call(this) && this.icon;
+    },
+
+
+    getMarkerIcon() {
+      if (!this.markerIcon) {
+        const { icon, fillColor, strokeColor, iconContent, iconFillColor, iconStrokeColor } = this;
+        this.markerIcon = this.createCustomMarkerIcon({ icon, fillColor, strokeColor, iconContent, iconFillColor, iconStrokeColor });
+      }
+      return this.markerIcon;
+    },
+
+    _updateMarkerIcon() {
+      if (!this.markerIcon) return;
+      const { icon, fillColor, strokeColor, iconContent, iconFillColor, iconOptionStrokeColor } = this;
+      this.markerIcon = this.markerIcon = this.createCustomMarkerIcon({ icon, fillColor, strokeColor, iconContent, iconFillColor, iconOptionStrokeColor });
+      this.shouldUpdateInst();
+    },
+
+    createCustomMarkerIcon({ icon = '', fillColor = 'black', strokeColor = 'transparent', iconContent = '', iconFillColor = '', iconStrokeColor = '' }) {
+      let iconVal = '';
+      if (iconContent.indexOf('px-') == -1) {
+        iconVal = `<span style="position: absolute; top:50%; left:50%; margin-left: -10px; margin-top: -10px; width:20px; height:20px; color:blue; font-size: 10px;text-align:center;">${iconContent}</span> `;
+      }
+      else {
+        iconVal =
+          `<px-icon icon="${iconContent}" style="position: absolute; top:50%; left:50%; margin-left: -6px; margin-top: -6px; width:12px; height:12px; stroke:${iconStrokeColor}; fill:${iconFillColor};"></px-icon>`;
+      }
+      const html = `
+        <div style="width: 32px; height: 32px; position: relative;" >
+          <px-icon icon="${icon}" style="width:100%; height:100%; stroke:${strokeColor}; fill:${fillColor};"></px-icon>
+        </div>
+        ${iconVal}
+      `;
+      const className = '';
+      const iconSize = L.point(32, 32);
+      const iconAnchor = L.point(16, 16);
+      const popupAnchor = L.point(0, -32);
+      return L.divIcon({
+        className,
+        html,
+        iconSize,
+        iconAnchor,
+        popupAnchor
+      });
+    }
+  };
   /* Bind Marker behavior */
   /** @polymerBehavior */
   PxMapBehavior.Marker = [
     PxMapBehavior.Layer,
     PxMapBehavior.ParentLayer,
-    PxMapBehavior.MarkerImpl
+    PxMapBehavior.MarkerImpl,
+    PxMapBehavior.CustomMarkerImpl
   ];
 
   /**
@@ -420,7 +526,7 @@
         fill: this.getComputedStyleValue("--iron-icon-fill-color")
       };
 
-      if (this.type.slice(0,7) === "custom-") {
+      if (this.type.slice(0, 7) === "custom-") {
         options.color = this.getComputedStyleValue(`--px-map-color-${this.type}`);
       }
 
@@ -499,7 +605,7 @@
         styleScope: this.isShadyScoped() ? this.getShadyScope() : undefined
       };
 
-      if (this.type.slice(0,7) === "custom-") {
+      if (this.type.slice(0, 7) === "custom-") {
         options.color = this.getComputedStyleValue(`--px-map-color-${this.type}`);
       }
 
@@ -649,9 +755,9 @@
       }
     },
 
-    onAdd: function() {
+    onAdd: function () {
       L.CircleMarker.prototype.onAdd.call(this);
-      if(this.options.title !== '') {
+      if (this.options.title !== '') {
         this._path.innerHTML = `<title>${this.options.title}</title>`;
       }
     }
