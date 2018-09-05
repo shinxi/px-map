@@ -316,13 +316,8 @@
         strokeColor,
         fillColor,
         content,
-        optionsFillColor,
-        optionsStrokeColor,
-        options: {
-          icon,
-          strokeColor: iconStrokeColor,
-          fillColor: iconFillColor
-        }
+        iconFillColor,
+        iconStrokeColor,
       } = settings;
 
       let iconVal = '';
@@ -330,7 +325,7 @@
         iconVal = `<span class="map-icon-custom__body">${content}</span> `;
       } else {
         iconVal =
-          `<px-icon class="map-icon-custom__body content-icon" icon="${content}" style="fill:${optionsFillColor}; stroke:${optionsStrokeColor};"></px-icon>`;
+          `<px-icon class="map-icon-custom__body content-icon" icon="${content}" style="fill:${iconFillColor}; stroke:${iconStrokeColor};"></px-icon>`;
       }
 
       // Custom template

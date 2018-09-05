@@ -54,7 +54,7 @@
         /**
         * Inner icon fill
         */
-        iconOptionsFillColor: {
+        iconFillColor: {
           type: String,
           value: 'blue'
         },
@@ -63,7 +63,7 @@
         /**
        * Inner icon stroke
        */
-        iconOptionsStrokeColor: {
+        iconStrokeColor: {
           type: String,
           value: 'grey'
         }
@@ -87,28 +87,28 @@
 
       getMarkerIcon() {
         if (!this.markerIcon) {
-          const { icon, fillColor, strokeColor, iconContent, iconOptionsFillColor, iconOptionsStrokeColor } = this;
-          this.markerIcon = createCustomMarkerIcon({ icon, fillColor, strokeColor, iconContent, iconOptionsFillColor, iconOptionsStrokeColor });
+          const { icon, fillColor, strokeColor, iconContent, iconFillColor, iconStrokeColor } = this;
+          this.markerIcon = createCustomMarkerIcon({ icon, fillColor, strokeColor, iconContent, iconFillColor, iconStrokeColor });
         }
         return this.markerIcon;
       },
 
       _updateMarkerIcon() {
         if (!this.markerIcon) return;
-        const { icon, fillColor, strokeColor, iconContent, iconOptionsFillColor, iconOptionStrokeColor } = this;
-        this.markerIcon = this.markerIcon = createCustomMarkerIcon({ icon, fillColor, strokeColor, iconContent, iconOptionsFillColor, iconOptionStrokeColor });
+        const { icon, fillColor, strokeColor, iconContent, iconFillColor, iconOptionStrokeColor } = this;
+        this.markerIcon = this.markerIcon = createCustomMarkerIcon({ icon, fillColor, strokeColor, iconContent, iconFillColor, iconOptionStrokeColor });
         this.shouldUpdateInst();
       }
     });
 
-    function createCustomMarkerIcon({ icon = '', fillColor = 'black', strokeColor = 'transparent', iconContent = '', iconOptionsFillColor = '', iconOptionsStrokeColor = '' }) {
+    function createCustomMarkerIcon({ icon = '', fillColor = 'black', strokeColor = 'transparent', iconContent = '', iconFillColor = '', iconStrokeColor = '' }) {
       let iconVal = '';
       if (iconContent.indexOf('px-') == -1) {
         iconVal = `<span style="position: absolute; top:50%; left:50%; margin-left: -10px; margin-top: -10px; width:20px; height:20px; color:blue; font-size: 10px;text-align:center;">${iconContent}</span> `;
       }
       else {
         iconVal =
-          `<px-icon icon="${iconContent}" style="position: absolute; top:50%; left:50%; margin-left: -6px; margin-top: -6px; width:12px; height:12px; stroke:${iconOptionsStrokeColor}; fill:${iconOptionsFillColor};"></px-icon>`;
+          `<px-icon icon="${iconContent}" style="position: absolute; top:50%; left:50%; margin-left: -6px; margin-top: -6px; width:12px; height:12px; stroke:${iconStrokeColor}; fill:${iconFillColor};"></px-icon>`;
       }
       const html = `
         <div style="width: 32px; height: 32px; position: relative;" >
