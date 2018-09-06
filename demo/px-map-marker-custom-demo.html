@@ -379,13 +379,74 @@ limitations under the License.
              ' show-feature-properties>
             </px-map-layer-geojson>
 
-            <px-map-marker-custom lat="37.773758" lng="-122.276773" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white"
+            <px-map-marker-group name="Bus stop data" data='{
+              "type": "FeatureCollection",
+              "features": [{
+                "dataType": "route",
+                "geometry": {
+                  "coordinates": ["-122.276773", " 37.773758"],
+                  "type": "Point"
+                },
+                "id": "home_8af66dad-fac7-442b-b97d-af19cfe1622a",
+                "properties": {
+                  "marker-icon": {
+                    "icon-base": "custom-icon",
+                    "icon-content": "px-nav:home",
+                    "icon-fillColor": "white",
+                    "icon-options": {
+                      "fillColor": "white",
+                      "strokeColor": "blue"
+                    },
+                    "icon-strokeColor": "#007acc",
+                    "icon-type": "px-nav:unconfirmed"
+                  },
+                  "marker-popup": {
+                    "popup-base": "info-popup",
+                    "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px; min-width: 150px; max-width:300px;\"><span>Starting Location</span></span>"
+                  },
+                  "markerType": "home",
+                  "uuid": "home_8af66dad-fac7-442b-b97d-af19cfe1622a"
+                },
+                "type": "Feature"
+              }, {
+                "dataType": "route",
+                "geometry": {
+                  "coordinates": ["-122.385787", "37.617906"],
+                  "type": "Point"
+                },
+                "id": "def39345-37c8-4c96-b552-4ee6cb898304",
+                "properties": {
+                  "marker-icon": {
+                    "icon-base": "custom-icon",
+                    "icon-content": "1",
+                    "icon-fillColor": "white",
+                    "icon-options": {
+                      "fillColor": "white",
+                      "strokeColor": "blue"
+                    },
+                    "icon-strokeColor": "#748b99",
+                    "icon-type": "px-nav:unconfirmed"
+                  },
+                  "marker-popup": {
+                    "popup-base": "info-popup",
+                    "popup-description": "<span style=\"display: block;text-align: center; font-size: 13px; min-width: 150px; max-width:300px;\"><span>[WO-00000137] Ultrasound Equipment Inc</span><br/><span>08:00 ~ 10:00</span></span>"
+                  },
+                  "markerType": "appointment",
+                  "uuid": "def39345-37c8-4c96-b552-4ee6cb898304"
+                },
+                "type": "Feature"
+              }]
+            }'>
+
+            </px-map-marker-group>
+
+            <!-- <px-map-marker-custom lat="37.773758" lng="-122.276773" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white"
               icon-content="px-nav:home" icon-fill-color="red" icon-stroke-color="white">
             </px-map-marker-custom>
 
             <px-map-marker-custom lat="37.617906" lng="-122.385787" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white"
               icon-content="px-nav:home" icon-fill-color="purple" icon-stroke-color="black">
-            </px-map-marker-custom>
+            </px-map-marker-custom> -->
 
           </px-map>
         </div>

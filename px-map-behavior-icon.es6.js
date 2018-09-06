@@ -338,7 +338,7 @@
 
       const className = this._generateCustomIconClasses(type, styleScope);
       const iconSize = L.point(32, 32);
-      const iconAnchor = L.point(16, 32);
+      const iconAnchor = L.point(0, 16);
       const popupAnchor = L.point(0, -32);
 
       // Define the `divIcon` options
