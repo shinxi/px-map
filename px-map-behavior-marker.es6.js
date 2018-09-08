@@ -170,7 +170,8 @@
       const geomWasDefined = (typeof lastOptions.geometry === 'object');
       const geomIsDefined = (typeof nextOptions.geometry === 'object');
       const geomIsDifferent = (geomWasDefined && geomIsDefined &&
-        (lastOptions.geometry.lat !== nextOptions.geometry.lat || lastOptions.geometry.lng !== nextOptions.geometry.lng)
+        (lastOptions.geometry.lat !== nextOptions.geometry.lat ||
+          lastOptions.geometry.lng !== nextOptions.geometry.lng)
       );
       if (geomWasDefined && !geomIsDefined) {
         this.elementInst.setOpacity(0);
@@ -390,11 +391,13 @@
       return PxMapBehavior.MarkerImpl.canAddInst.call(this) && this.icon;
     },
 
-
     getMarkerIcon() {
       if (!this.markerIcon) {
         const { icon, fillColor, strokeColor, iconContent, iconFillColor, iconStrokeColor } = this;
-        this.markerIcon = this.createCustomMarkerIcon({ icon, fillColor, strokeColor, iconContent, iconFillColor, iconStrokeColor });
+        this.markerIcon = this.createCustomMarkerIcon({
+          icon, fillColor, strokeColor,
+          iconContent, iconFillColor, iconStrokeColor
+        });
       }
       return this.markerIcon;
     },
@@ -402,22 +405,32 @@
     _updateMarkerIcon() {
       if (!this.markerIcon) return;
       const { icon, fillColor, strokeColor, iconContent, iconFillColor, iconOptionStrokeColor } = this;
-      this.markerIcon = this.markerIcon = this.createCustomMarkerIcon({ icon, fillColor, strokeColor, iconContent, iconFillColor, iconOptionStrokeColor });
+      this.markerIcon = this.markerIcon = this.createCustomMarkerIcon({
+        icon, fillColor, strokeColor,
+        iconContent, iconFillColor, iconOptionStrokeColor
+      });
       this.shouldUpdateInst();
     },
 
-    createCustomMarkerIcon({ icon = '', fillColor = 'black', strokeColor = 'transparent', iconContent = '', iconFillColor = '', iconStrokeColor = '' }) {
+    createCustomMarkerIcon({ icon = '', fillColor = 'black',
+      strokeColor = 'transparent',
+      iconContent = '', iconFillColor = '', iconStrokeColor = '' }) {
       let iconVal = '';
       if (iconContent.indexOf('px-') == -1) {
-        iconVal = `<span style="position: absolute; top:50%; left:50%; margin-left: -10px; margin-top: -10px; width:20px; height:20px; color:blue; font-size: 10px;text-align:center;">${iconContent}</span> `;
+        iconVal = `<span style="position: absolute; top:50%;
+        left:50%; margin-left: -10px; margin-top: -10px; width:20px; height:20px;
+        color:blue; font-size: 10px;text-align:center;">${iconContent}</span> `;
       }
       else {
         iconVal =
-          `<px-icon icon="${iconContent}" style="position: absolute; top:50%; left:50%; margin-left: -6px; margin-top: -6px; width:12px; height:12px; stroke:${iconStrokeColor}; fill:${iconFillColor};"></px-icon>`;
+          `<px-icon icon="${iconContent}" style="position: absolute; top:50%;
+          left:50%; margin-left: -6px; margin-top: -6px; width:12px; height:12px;
+          stroke:${iconStrokeColor}; fill:${iconFillColor};"></px-icon>`;
       }
       const html = `
         <div style="width: 32px; height: 32px; position: relative;" >
-          <px-icon icon="${icon}" style="width:100%; height:100%; stroke:${strokeColor}; fill:${fillColor};"></px-icon>
+          <px-icon icon="${icon}" style="width:100%; height:100%;
+          stroke:${strokeColor}; fill:${fillColor};"></px-icon>
         </div>
         ${iconVal}
       `;
@@ -672,7 +685,8 @@
       const geomWasDefined = (typeof lastOptions.geometry === 'object');
       const geomIsDefined = (typeof nextOptions.geometry === 'object');
       const geomIsDifferent = (geomWasDefined && geomIsDefined &&
-        (lastOptions.geometry.lat !== nextOptions.geometry.lat || lastOptions.geometry.lng !== nextOptions.geometry.lng)
+        (lastOptions.geometry.lat !== nextOptions.geometry.lat ||
+          lastOptions.geometry.lng !== nextOptions.geometry.lng)
       );
       if (geomWasDefined && !geomIsDefined) {
         this.markerBaseIcon.setStyle({ opacity: 0, fillOpacity: 0 });
