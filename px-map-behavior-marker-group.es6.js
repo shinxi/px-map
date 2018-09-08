@@ -196,42 +196,6 @@
         notify: true
       },
 
-      /**
-       * The latitude of the active map center. Can be used to set or update
-       * the center of the map, or read from after the user moves the map to
-       * get updated coordinates.
-       *
-       * @type {Number}
-       */
-      lat: {
-        type: Number,
-        value: null,
-      },
-
-      /**
-       * The longitude of the active map center. Can be used to set or update
-       * the center of the map, or read from after the user moves the map to
-       * get updated coordinates.
-       *
-       * @type {Number}
-       */
-      lng: {
-        type: Number,
-        value: null,
-      },
-
-      /**
-       * The zoom level of the active map. Can be used to set or update
-       * the zoom level of the map, or read from after the user changes the
-       * map zoom level to an updated value.
-       *
-       * @type {Number}
-       */
-      zoom: {
-        type: Number,
-        value: 10,
-      },
-
     },
 
     // PUBLIC METHODS
@@ -418,9 +382,6 @@
       options.iconCreateFunction = this._createClusterIcon.bind(this);
 
       options.opened = this.opened;
-      options.lat = this.lat;
-      options.lng = this.lng;
-      options.zoom = this.zoom;
       // Return the options composed together
       return options;
     },
@@ -999,6 +960,10 @@
       marker.off('popupclose', marker.__boundCloseFn);
       marker.__boundCloseFn = null;
       marker.closePopup().unbindPopup();
+
+      // dehydrate opened prop so,
+      // upon map click closed popup opens back again on item click
+      this.opened = null;
     },
 
     /**

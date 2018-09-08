@@ -707,7 +707,7 @@ limitations under the License.
       tmpl.geoJSON = featCollection;
 
       // pass-in lat/lng and zoom prop to px-map to navigate item clicked
-      // pass-in lat/lng, opened prop to px-marker-group to compare and select feature clicked
+      // pass-in opened prop/featureId to px-marker-group to compare and select feature clicked
       // track if popup opened
       var pxMap = document.getElementById('pxMap');
       var pxMarkerGroup = document.getElementById('pxMarkerGroup');
@@ -720,8 +720,6 @@ limitations under the License.
         pxMap.lng = LNG;
         pxMap.zoom = 17; //single marker centered to map
 
-        pxMarkerGroup.lat = LAT;
-        pxMarkerGroup.lng = LNG;
         pxMarkerGroup.opened = id;
         this.classList.toggle("highlight-item");
       });
@@ -735,8 +733,6 @@ limitations under the License.
         pxMap.lng = LNG;
         pxMap.zoom = 17; //single marker centered to map
 
-        pxMarkerGroup.lat = LAT;
-        pxMarkerGroup.lng = LNG;
         pxMarkerGroup.opened = id;
       });
       // marker in a cluster
@@ -748,8 +744,6 @@ limitations under the License.
         pxMap.lng = LNG;
         pxMap.zoom = 17; //single marker centered to map
 
-        pxMarkerGroup.lat = LAT;
-        pxMarkerGroup.lng = LNG;
         pxMarkerGroup.opened = id;
       });
 
