@@ -406,8 +406,7 @@
       this.settings = settings;
       const { title, description, imgSrc, styleScope, content: htmlContent, maxWidth = 400, minWidth = 300, margin, customContent } = settings;
       const content = this._generatePopupContent(margin, title, description, imgSrc, customContent, htmlContent);
-      // dynamically opened marker-group popup needs some offset, hence `map-popup-offset`
-      const className = `map-popup-info ${settings.autoOpenPopup ? 'map-popup-offset': ''} ${styleScope||''}`
+      const className = `map-popup-info ${styleScope||''}`
 
       this.initialize({ className, maxWidth, minWidth, customContent });
       this.setContent(content);
@@ -541,8 +540,7 @@
       this.settings = settings;
       const { title, data, styleScope, margin, maxWidth = 400, minWidth = 300 } = settings;
       const content = this._generatePopupContent(title, data);
-      // dynamically opened marker-group popup needs some offset, hence `map-popup-offset`
-      const className = `map-popup-data ${settings.autoOpenPopup ? 'map-popup-offset': ''} ${styleScope||''}`
+      const className = `map-popup-data ${styleScope||''}`
 
       this.initialize({ className, margin, maxWidth, minWidth });
       this.setContent(content);

@@ -71,6 +71,7 @@ limitations under the License.
     <ul>
       <li><button id="markerOne">Marker One</button></li>
       <li><button id="markerTwo">Marker Two</button></li>
+      <li><button id="markerThree">Marker Three</button></li>
     </ul>
   </section>
   <script>
@@ -114,8 +115,8 @@ limitations under the License.
             "geometry": {
               "type": "Point",
               "coordinates": [
-                "-117.27618677",
-                "32.83957829"
+                "-117.26867322",
+                "32.8458467"
               ]
             },
             "properties": {
@@ -129,8 +130,8 @@ limitations under the License.
                 "popup-base": "data-popup",
                 "popup-title": "Pearl St & Draper Av",
                 "popup-data": {
-                  "LAT": "32.83957829",
-                  "LNG": "-117.27618677",
+                  "LAT": "32.8458467",
+                  "LNG": "-117.26867322",
                   "STATE": "info"
                 }
               }
@@ -142,8 +143,8 @@ limitations under the License.
             "geometry": {
               "type": "Point",
               "coordinates": [
-                "-117.2738099",
-                "32.84012848"
+                "-117.26867322",
+                "32.8458467"
               ]
             },
             "properties": {
@@ -157,8 +158,8 @@ limitations under the License.
                 "popup-base": "data-popup",
                 "popup-title": "Pearl St & Fay Av",
                 "popup-data": {
-                  "LAT": "32.84012848",
-                  "LNG": "-117.2738099",
+                  "LAT": "32.8458467",
+                  "LNG": "-117.26867322",
                   "STATE": "unknown"
                 }
               }
@@ -198,8 +199,8 @@ limitations under the License.
             "geometry": {
               "type": "Point",
               "coordinates": [
-                "-117.26175158",
-                "32.84931178"
+                "-117.26867322",
+                "32.8458467"
               ]
             },
             "properties": {
@@ -213,8 +214,8 @@ limitations under the License.
                 "popup-base": "data-popup",
                 "popup-title": "Torrey Pines Rd & Hillside Dr",
                 "popup-data": {
-                  "LAT": "32.84931178",
-                  "LNG": "-117.26175158",
+                  "LAT": "32.8458467",
+                  "LNG": "-117.26867322",
                   "STATE": "unknown"
                 }
               }
@@ -226,12 +227,12 @@ limitations under the License.
             "geometry": {
               "type": "Point",
               "coordinates": [
-                "-117.24825013",
-                "32.79810093"
+                "-117.26867322",
+                "32.8458467"
               ]
             },
             "properties": {
-              "title": "Garnet Av & Everts St",
+              "title": "Torrey Pines Rd & Hillside Dr",
               "marker-icon": {
                 "icon-base": "static-icon",
                 "icon-type": "unknown",
@@ -239,17 +240,17 @@ limitations under the License.
               },
               "marker-popup": {
                 "popup-base": "data-popup",
-                "popup-title": "Garnet Av & Everts St",
+                "popup-title": "Torrey Pines Rd & Hillside Dr",
                 "popup-data": {
-                  "LAT": "32.79810093",
-                  "LNG": "-117.24825013",
+                  "LAT": "32.8458467",
+                  "LNG": "-117.26867322",
                   "STATE": "unknown"
                 }
               }
             },
             "id": "10011"
-          },
-          {
+            },
+            {
             "type": "Feature",
             "geometry": {
               "type": "Point",
@@ -706,11 +707,12 @@ limitations under the License.
       tmpl.geoJSON = featCollection;
 
       // pass-in lat/lng and zoom prop to px-map to navigate item clicked
-      // pass-in lat/lng, opened prop to px-marker-group to compare and select feature clicked
+      // pass-in opened prop/featureId to px-marker-group to compare and select feature clicked
       // track if popup opened
       var pxMap = document.getElementById('pxMap');
       var pxMarkerGroup = document.getElementById('pxMarkerGroup');
-      document.getElementById('markerOne').addEventListener('click', function() {
+      const markerOne = document.getElementById('markerOne');
+      markerOne.addEventListener('click', function() {
         const [LNG, LAT] = featCollection.features[0].geometry.coordinates;
         const { id } = featCollection.features[0];
         if(!LAT || !LNG) return;
@@ -718,11 +720,11 @@ limitations under the License.
         pxMap.lng = LNG;
         pxMap.zoom = 17; //single marker centered to map
 
-        pxMarkerGroup.lat = LAT;
-        pxMarkerGroup.lng = LNG;
         pxMarkerGroup.opened = id;
+        this.classList.toggle("highlight-item");
       });
 
+      // marker in a cluster
       document.getElementById('markerTwo').addEventListener('click', function() {
         const [LNG, LAT] = featCollection.features[1].geometry.coordinates;
         const { id } = featCollection.features[1];
@@ -731,8 +733,17 @@ limitations under the License.
         pxMap.lng = LNG;
         pxMap.zoom = 17; //single marker centered to map
 
-        pxMarkerGroup.lat = LAT;
-        pxMarkerGroup.lng = LNG;
+        pxMarkerGroup.opened = id;
+      });
+      // marker in a cluster
+      document.getElementById('markerThree').addEventListener('click', function() {
+        const [LNG, LAT] = featCollection.features[5].geometry.coordinates;
+        const { id } = featCollection.features[5];
+        if(!LAT || !LNG) return;
+        pxMap.lat = LAT;
+        pxMap.lng = LNG;
+        pxMap.zoom = 17; //single marker centered to map
+
         pxMarkerGroup.opened = id;
       });
 
