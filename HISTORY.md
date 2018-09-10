@@ -1,3 +1,16 @@
+
+v3.13.0
+===================
+## Enhancement:
+* Make The custom icon content's fill and stroke configurable.
+* Add the demo for the same.
+
+v3.12.0
+===================
+## Enhancement and Bug fix:
+* Automatic spidering effect if multiple markers are in the same location.
+* The tooltip is not shown in the right position when the marker uses symbol icon.
+
 v3.11.0
 ===================
 ## Enhancement:

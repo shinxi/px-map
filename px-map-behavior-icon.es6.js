@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-(function() {
+(function () {
   'use strict';
 
   /****************************************************************************
@@ -282,7 +282,7 @@
       // For each path, generate a `<path>` tag with the correct attributes
       const pathTmpl = (pathData, pathIndex) =>
         `<path d="${arcPathGeneratorFn(pathData)}" fill="${
-          colorsArray[pathIndex]
+        colorsArray[pathIndex]
         }" opacity="1"></path>`;
 
       return `
@@ -316,11 +316,8 @@
         strokeColor,
         fillColor,
         content,
-        options: {
-          icon,
-          strokeColor: iconStrokeColor,
-          fillColor: iconFillColor
-        }
+        iconFillColor,
+        iconStrokeColor,
       } = settings;
 
       let iconVal = '';
@@ -328,7 +325,7 @@
         iconVal = `<span class="map-icon-custom__body">${content}</span> `;
       } else {
         iconVal =
-        `<px-icon class="map-icon-custom__body content-icon" icon="${content}"></px-icon>`;
+          `<px-icon class="map-icon-custom__body content-icon" icon="${content}" style="fill:${iconFillColor}; stroke:${iconStrokeColor};"></px-icon>`;
       }
 
       // Custom template
@@ -341,7 +338,7 @@
 
       const className = this._generateCustomIconClasses(type, styleScope);
       const iconSize = L.point(32, 32);
-      const iconAnchor = L.point(16, 32);
+      const iconAnchor = L.point(0, 16);
       const popupAnchor = L.point(0, -32);
 
       // Define the `divIcon` options
