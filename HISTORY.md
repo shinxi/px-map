@@ -1,4 +1,10 @@
 
+v3.14.0
+===================
+## Enhancement:
+* Route highlight made simple. Irrespective of route color the highlighted color will be a darker version of the existing route color
+* Add the demo for the same.
+
 v3.13.0
 ===================
 ## Enhancement:

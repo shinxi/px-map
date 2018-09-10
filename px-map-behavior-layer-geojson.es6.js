@@ -256,7 +256,7 @@
       };
     },
 
-    highlightSelectedFeature(data, currentTargetId) {
+    highlightSelectedFeature(data, currentTargetId, currentRouteColor) {
       const geoData = JSON.parse(JSON.stringify(data));
       let objectToAppendWeight = {};
       let objectToAppendColor = {};
@@ -269,11 +269,17 @@
 
       objectToAppendWeight = JSON.parse(JSON.stringify(featureObject));
       objectToAppendColor = JSON.parse(JSON.stringify(featureObject));
+      objectToAppendHighlight = JSON.parse(JSON.stringify(featureObject));
 
       objectToAppendWeight.properties.style = {
         weight: 5,
         opacity: 0.7,
-        color: '#0c426f',
+        color: currentRouteColor,
+      };
+
+      objectToAppendHighlight.properties.style = {
+        weight: 5,
+        color: 'rgba(0, 0, 0, 0.5)',
       };
 
       objectToAppendColor.properties.style = {
@@ -283,6 +289,7 @@
       };
 
       geoData.features.push(objectToAppendWeight);
+      geoData.features.push(objectToAppendHighlight);
       geoData.features.push(objectToAppendColor);
 
       return geoData;
@@ -335,6 +342,7 @@
      */
 
     _handleFeatureTapped(evt) {
+      let currentRouteColor = evt.target.options.color;
       if (evt.target && evt.target.feature) {
         var currentTargetId = evt.target.feature.id;
       }
@@ -344,8 +352,7 @@
           delete element.properties.style;
         }
       });
-
-      const geoData = this.highlightSelectedFeature(this.data, currentTargetId);
+      const geoData = this.highlightSelectedFeature(this.data, currentTargetId, currentRouteColor);
       this.set('showFeatureProperties', 'true');
       this.set('data', JSON.parse(JSON.stringify(geoData)));
 
