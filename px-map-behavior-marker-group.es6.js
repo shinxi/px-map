@@ -196,42 +196,6 @@
         notify: true
       },
 
-      /**
-       * The latitude of the active map center. Can be used to set or update
-       * the center of the map, or read from after the user moves the map to
-       * get updated coordinates.
-       *
-       * @type {Number}
-       */
-      lat: {
-        type: Number,
-        value: null,
-      },
-
-      /**
-       * The longitude of the active map center. Can be used to set or update
-       * the center of the map, or read from after the user moves the map to
-       * get updated coordinates.
-       *
-       * @type {Number}
-       */
-      lng: {
-        type: Number,
-        value: null,
-      },
-
-      /**
-       * The zoom level of the active map. Can be used to set or update
-       * the zoom level of the map, or read from after the user changes the
-       * map zoom level to an updated value.
-       *
-       * @type {Number}
-       */
-      zoom: {
-        type: Number,
-        value: 10,
-      },
-
     },
 
     // PUBLIC METHODS
@@ -310,6 +274,9 @@
         this._notifyNewFeatures(features);
       }
 
+      //needs this inst to get visibleLayer later on
+      this.markers = cluster;
+
       return cluster;
     },
 
@@ -325,19 +292,70 @@
           const nextOptionsData = nextOptions.data;
           if (nextOptionsData && nextOptionsData.features.length) {
             // find if selected item exists
-            const selectedFeature = nextOptionsData.features.find(feature => feature.id === nextOptions.opened);
+            const selectedFeature = this._markersRef.find(feature => feature.id === nextOptions.opened);
             // if selectedFeature hasPopup
-            const hasFeaturePopup = selectedFeature && selectedFeature.properties.hasOwnProperty('marker-popup');
+            const hasFeaturePopup = selectedFeature && selectedFeature.featureProperties.hasOwnProperty('marker-popup');
             if(hasFeaturePopup) {
-              // run it by _createMarker, so the marker inherits bindPopup and openPopup methods
-              // hand it over to _bindAndOpenPopup with marker
-              const marker = this._createMarker(selectedFeature);
-              this._bindAndOpenPopup(marker, true);
+              // As map zooms-in/navigates to marker, defer open popup so, to avoid flickering
+              // _fireEventOnMarkerOrVisibleParentCluster & _unspiderfyPreviousClusterIfNotParentOf
+              this.async(() => {
+                // spiderfying only the clustered marker
+                if(selectedFeature.__parent._markers.length > 1) {
+                  this._fireEventOnMarkerOrVisibleParentCluster(selectedFeature);
+                } else {
+                  this._bindAndOpenPopup(selectedFeature);
+                  this._unspiderfyPreviousClusterIfNotParentOf(selectedFeature);
+                }
+              });
             }
           };
         }
       }
 
+    },
+
+    _fireEventOnMarkerOrVisibleParentCluster(marker) {
+        var visibleLayer = this.markers.getVisibleParent(marker);
+
+        if (visibleLayer instanceof L.MarkerCluster) {
+          // We want to show a marker that is currently hidden in a cluster.
+          // Make sure it will get highlighted once revealed.
+          this.markers.once('spiderfied', () => {
+            this._bindAndOpenPopup(marker);
+          });
+          // Now spiderfy its containing cluster to reveal it.
+          // This will automatically unspiderfy other clusters.
+          visibleLayer.spiderfy();
+        } else {
+          // The marker is already visible, unspiderfy other clusters if
+          // they do not contain the marker.
+          this._unspiderfyPreviousClusterIfNotParentOf(marker);
+          this._bindAndOpenPopup(marker);
+        }
+    },
+
+    _unspiderfyPreviousClusterIfNotParentOf(marker) {
+      // Check if there is a currently spiderfied cluster.
+      // If so and it does not contain the marker, unspiderfy it.
+      var spiderfiedCluster = this.markers._spiderfied;
+
+      if (
+        spiderfiedCluster
+        && !this._clusterContainsMarker(spiderfiedCluster, marker)
+      ) {
+        spiderfiedCluster.unspiderfy();
+      }
+    },
+
+    _clusterContainsMarker(cluster, marker) {
+      var currentLayer = marker;
+
+      while (currentLayer && currentLayer !== cluster) {
+        currentLayer = currentLayer.__parent;
+      }
+
+      // Say if we found a cluster or nothing.
+      return !!currentLayer;
     },
 
     getInstOptions() {
@@ -364,9 +382,6 @@
       options.iconCreateFunction = this._createClusterIcon.bind(this);
 
       options.opened = this.opened;
-      options.lat = this.lat;
-      options.lng = this.lng;
-      options.zoom = this.zoom;
       // Return the options composed together
       return options;
     },
@@ -626,6 +641,7 @@
 
       const featuresSet = this._features = (this._features || new Set());
       const markersMap = this._markers = (this._markers || new WeakMap());
+      const markersRef = this._markersRef = (this._markersRef || []);
 
       const {featuresToAdd, featuresToUpdate, featuresToRemove, nextFeaturesSet, nextMarkersMap} = this._diffNewFeatures(newFeatures, featuresSet, markersMap);
 
@@ -637,6 +653,7 @@
           cachedMarker = nextMarkersMap.get(feature);
           cachedMarker.marker = this._createMarker(feature);
           markersToOperate.push(cachedMarker.marker);
+          markersRef.push(cachedMarker.marker);
           nextMarkersMap.set(feature, cachedMarker);
         }
         clusterInst.addLayers(markersToOperate);
@@ -765,6 +782,7 @@
 
       // Attach the properties to the marker instance to read later
       marker.featureProperties = feature.properties;
+      marker.id = feature.id;
 
       return marker;
     },
@@ -785,6 +803,7 @@
 
       // Attach the properties to the marker instance to read later
       marker.featureProperties = feature.properties;
+      marker.id = feature.id;
 
       return marker;
     },
@@ -922,24 +941,15 @@
      * @event px-map-marker-group-cluster-tapped
      */
 
-    _bindAndOpenPopup(marker, autoOpenPopup=false) {
+    _bindAndOpenPopup(marker) {
       if (!marker || !marker.bindPopup || !marker.openPopup) return;
 
       const popupSettings = this._featSettingsToProps(marker.featureProperties['marker-popup'], 'popup');
-      popupSettings.autoOpenPopup = autoOpenPopup;
       if (!popupSettings || !Object.keys(popupSettings).length) return;
 
       const klassName = (popupSettings._Base && PxMap.hasOwnProperty(popupSettings._Base)) ? popupSettings._Base : 'InfoPopup';
       const popup = new PxMap[klassName](popupSettings);
-      const {lat, lng} = marker._latlng;
-      const popupOptions = JSON.parse(JSON.stringify(popup.options));
-      const pxMapEl = document.getElementsByTagName('px-map')[0]; // considering there is always single instance of px-map
-      autoOpenPopup ? // automatically open popup of selected marker
-      L.popup(popupOptions)
-      .setLatLng([lat, lng])
-      .setContent(popup._content)
-      .openOn(pxMapEl.elementInst) :
-      marker.bindPopup(popup).openPopup(); // single markerTap open popup
+      marker.bindPopup(popup).openPopup();
       marker.__boundCloseFn = this._unbindAndClosePopup.bind(this, marker);
       marker.on('popupclose', marker.__boundCloseFn);
     },
@@ -950,6 +960,10 @@
       marker.off('popupclose', marker.__boundCloseFn);
       marker.__boundCloseFn = null;
       marker.closePopup().unbindPopup();
+
+      // dehydrate opened prop so,
+      // upon map click closed popup opens back again on item click
+      this.opened = null;
     },
 
     /**
