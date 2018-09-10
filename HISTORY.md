@@ -1,3 +1,10 @@
+
+v3.13.0
+===================
+## Enhancement:
+* Make The custom icon content's fill and stroke configurable.
+* Add the demo for the same.
+
 v3.12.0
 ===================
 ## Enhancement and Bug fix:
