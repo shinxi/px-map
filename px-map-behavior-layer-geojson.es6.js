@@ -342,16 +342,23 @@
      */
 
     _handleFeatureTapped(evt) {
+      var features = this.data.features
+      var featureIdObj = {};
+      var uniqueFeatureArr = [];
+      for (var feature in features) {
+        if (!featureIdObj[features[feature].id]) {
+          featureIdObj[features[feature].id] = features[feature].id;
+          uniqueFeatureArr.push(features[feature]);
+        }
+      }
+
+      this.data.features = uniqueFeatureArr;
+      this.set('data', this.data);
       let currentRouteColor = evt.target.options.color;
       if (evt.target && evt.target.feature) {
         var currentTargetId = evt.target.feature.id;
       }
       this.set('showFeatureProperties', 'false');
-      this.data.features.forEach((element) => {
-        if (element.properties.style) {
-          delete element.properties.style;
-        }
-      });
       const geoData = this.highlightSelectedFeature(this.data, currentTargetId, currentRouteColor);
       this.set('showFeatureProperties', 'true');
       this.set('data', JSON.parse(JSON.stringify(geoData)));
