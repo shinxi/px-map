@@ -353,7 +353,7 @@
       }
 
       this.data.features = uniqueFeatureArr;
-      this.set('data', this.data);
+      // this.set('data', this.data);
       let currentRouteColor = evt.target.options.color;
       if (evt.target && evt.target.feature) {
         var currentTargetId = evt.target.feature.id;
