@@ -1,4 +1,11 @@
 
+v3.14.1
+===================
+## Bug Fix:
+* Text color of the custom marker icon configurable.
+* Updated the demo for the same.
+* Fix the custom icon placement bug
+
 v3.14.0
 ===================
 ## Enhancement:

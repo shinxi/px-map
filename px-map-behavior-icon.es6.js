@@ -312,6 +312,7 @@
       // type defaults to type='px-nav:unconfirmed'
       let {
         type = 'px-nav:unconfirmed',
+        textColor,
         styleScope,
         strokeColor,
         fillColor,
@@ -322,7 +323,7 @@
 
       let iconVal = '';
       if (content.indexOf('px-') == -1) {
-        iconVal = `<span class="map-icon-custom__body">${content}</span> `;
+        iconVal = `<span class="map-icon-custom__body" style="color: ${textColor}" >${content}</span> `;
       } else {
         iconVal =
           `<px-icon class="map-icon-custom__body content-icon" icon="${content}" style="fill:${iconFillColor}; stroke:${iconStrokeColor};"></px-icon>`;
