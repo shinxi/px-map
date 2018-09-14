@@ -1,4 +1,11 @@
 
+v3.14.2
+===================
+## Bug Fix:
+* Click on visited route, then click on other route was changing the visited route color
+* Updated the demo for the same.
+
+
 v3.14.1
 ===================
 ## Bug Fix:
