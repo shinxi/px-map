@@ -342,6 +342,8 @@
      */
 
     _handleFeatureTapped(evt) {
+      this.set('showFeatureProperties', 'false');
+
       var features = this.data.features
       var featureIdObj = {};
       var uniqueFeatureArr = [];
@@ -353,12 +355,10 @@
       }
 
       this.data.features = uniqueFeatureArr;
-      // this.set('data', this.data);
       let currentRouteColor = evt.target.options.color;
       if (evt.target && evt.target.feature) {
         var currentTargetId = evt.target.feature.id;
       }
-      this.set('showFeatureProperties', 'false');
       const geoData = this.highlightSelectedFeature(this.data, currentTargetId, currentRouteColor);
       this.set('showFeatureProperties', 'true');
       this.set('data', JSON.parse(JSON.stringify(geoData)));
