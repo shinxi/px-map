@@ -438,9 +438,9 @@
         ${iconVal}
       `;
       const className = '';
-      const iconSize = L.point(32, 32);
-      const iconAnchor = L.point(16, 16);
-      const popupAnchor = L.point(0, -32);
+      const iconSize = L.point(22, 22);
+      const iconAnchor = L.point(11, 11);
+      const popupAnchor = L.point(0, -16);
       return L.divIcon({
         className,
         html,

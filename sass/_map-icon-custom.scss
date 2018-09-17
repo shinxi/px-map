@@ -23,37 +23,37 @@
 
 .map-icon-custom {
   @extend %map-icon !optional;
-  width: 50px;
-  height: 50px;
+  width: 32px;
+  height: 32px;
   display: block;
   position: absolute;
 }
 
 .map-icon-custom__wrapper {
-  width:32px;
-  height: 32px;
+  width: 22px;
+  height: 22px;
   position: relative;
 }
 
 // ICON BODY
 .map-icon-custom__body {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -15px;
-  margin-left: -15px;
-  width: 20px;
-  height: 20px;
+  top: 0;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
   color: var(--internal-px-map-icon-info-color);
   font-size: 10px;
   text-align: center;
+  vertical-align: middle;
   stroke: var(--px-map-icon-unknown-color);
   fill: var(--internal-px-map-icon-info-color);
 
   &.content-icon {
-    width:12px;
-    height:12px;
-    margin-left: -11px; 
-    margin-top: -11.5px
+    width: 12px;
+    height: 12px;
+    margin-left: 5px; 
+    margin-top: 4.5px
   }
 }
