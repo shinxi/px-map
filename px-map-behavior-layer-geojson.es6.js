@@ -170,7 +170,7 @@
         radius: featureProperties.radius || attributeProperties.radius || 5,
         color: featureProperties.color || attributeProperties.color || '#3E87E8', // primary-blue,
         fillColor: featureProperties.fillColor || attributeProperties.fillColor || '#88BDE6', // $dv-light-blue
-        weight: featureProperties.weight || attributeProperties.weight || 3,
+        weight: featureProperties.weight || attributeProperties.weight || 5,
         opacity: featureProperties.opacity || attributeProperties.opacity || 1,
         fillOpacity: featureProperties.fillOpacity || attributeProperties.fillOpacity || 0.4,
       };
@@ -272,13 +272,13 @@
       objectToAppendHighlight = JSON.parse(JSON.stringify(featureObject));
 
       objectToAppendWeight.properties.style = {
-        weight: 6,
+        weight: 5,
         opacity: 0.7,
         color: currentRouteColor,
       };
 
       objectToAppendHighlight.properties.style = {
-        weight: 6,
+        weight: 5,
         color: 'rgba(0, 0, 0, 0.5)',
       };
 
