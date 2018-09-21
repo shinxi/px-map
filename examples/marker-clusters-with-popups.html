@@ -73,6 +73,9 @@ limitations under the License.
       <li><button id="markerTwo">Marker Two</button></li>
       <li><button id="markerThree">Marker Three</button></li>
     </ul>
+    <ul>
+      <li><button id="markerCloseAllPopups">Marker - Close All Popups</button></li>
+    </ul>
   </section>
   <script>
     var tmplQuery = Polymer.Element ? 'dom-bind' : 'template[is=dom-bind]';
@@ -722,6 +725,12 @@ limitations under the License.
 
         pxMarkerGroup.opened = id;
         this.classList.toggle("highlight-item");
+      });
+
+      // reset opened prop to null so, popups on mapInst are closed
+      const markerCloseAllPopups = document.getElementById('markerCloseAllPopups');
+      markerCloseAllPopups.addEventListener('click', function() {
+        pxMarkerGroup.opened = null;
       });
 
       // marker in a cluster
