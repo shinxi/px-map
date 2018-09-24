@@ -1,4 +1,4 @@
-v3.15.0
+v3.15.1
 ===================
 ## Minor enhancement + tweak route weight
 * The route weight default is changed to 5, to make the clickable area a little big so its not hard to click on zoomed in level
