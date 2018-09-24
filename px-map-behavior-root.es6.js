@@ -197,11 +197,13 @@
           const zoom = this._getZoomLevelForFit(bounds, this.fitToMarkersZoom, this.elementInst);
           this.elementInst.setView(latLng, zoom);
 
-          // This setTimeout is added because of a leaflet known issue when
-          // changing both zoom level and map center at the same time. In rare
-          // cases where the new center is already in view, and a zoom level is
-          // being passed in, the map will not center properly.
-          // Ref: https://github.com/Leaflet/Leaflet/issues/3249#issuecomment-75931374
+          /**
+           * This setTimeout is added because of a leaflet known issue when
+           *  changing both zoom level and map center at the same time. In rare
+           * cases where the new center is already in view, and a zoom level is
+           * being passed in, the map will not center properly.
+           * Ref: https://github.com/Leaflet/Leaflet/issues/3249#issuecomment-75931374
+           */
           const mapInst = this.elementInst;
           setTimeout(function() {
             if (mapInst.getCenter() !== latLng) {
