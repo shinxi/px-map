@@ -69,9 +69,14 @@
        * how the map will calculate its zoom level when fitting markers.
        * Choose from the following options (default is 'max'):
        *
-       *    * 'max' - the map will zoom to the lowest level that fits all markers (but not past the map's `maxZoom`)
-       *    * 'min' - the map will zoom to the highest level that fits all markers (but not past the map's `minZoom`)
-       *    * 'auto' - the map will zoom to the whatever level it needs to fit all markers (but not past the map's `minZoom` or `maxZoom`)
+       *    * 'max' - the map will zoom out to `minZoom` level regardless of
+       *      currently rendered markers
+       *    * 'min' - the map will attempt to zoom in to the lowest level (within
+       *      the `maxZoom` setting) that fits all markers, provided the markers
+       *      are rendered close together.
+       *    * 'auto' - the map will zoom in our out to the whatever level it
+       *      needs to fit all rendered markers (within the map's `minZoom` or
+       *     `maxZoom`)
        *
        * @type {String}
        */
@@ -192,10 +197,11 @@
           const zoom = this._getZoomLevelForFit(bounds, this.fitToMarkersZoom, this.elementInst);
           this.elementInst.setView(latLng, zoom);
 
-          // This setTimeout is added because of a leaflet known issue when changing both zoom level
-          // and map center at the same time. In rare cases where the new center is already in view,
-          // and a zoom level is being passed in, the map will not center properly.
-          // Reference: https://github.com/Leaflet/Leaflet/issues/3249#issuecomment-75931374
+          // This setTimeout is added because of a leaflet known issue when
+          // changing both zoom level and map center at the same time. In rare
+          // cases where the new center is already in view, and a zoom level is
+          // being passed in, the map will not center properly.
+          // Ref: https://github.com/Leaflet/Leaflet/issues/3249#issuecomment-75931374
           const mapInst = this.elementInst;
           setTimeout(function() {
             if (mapInst.getCenter() !== latLng) {
@@ -743,7 +749,8 @@
      *   * {Number} detail.lat - Latitude of the map centerpoint after moving
      *   * {Number} detail.lng - Longitude of the map centerpoint after moving
      *   * {Number} detail.zoom - Zoom level of the map after moving
-     *   * {L.LatLngBounds} detail.bounds - Custom Leaflet object describing the visible bounds of the map as a rectangle
+     *   * {L.LatLngBounds} detail.bounds - Custom Leaflet object describing
+     *     the visible bounds of the map as a rectangle
      *
      * @event px-map-moved
      */

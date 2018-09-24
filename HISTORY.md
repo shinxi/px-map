@@ -1,10 +1,20 @@
 
+v3.15.0
+===================
+## Enhancement:
+* Added new `auto` setting for `fitToMarkersZoom` which will automatically ensure that
+  markers plotted on the map will be visible within the bounds of the window on first
+  render; the current `min/max` do not provide the correct zoom settings due to an
+  incorrect zoom calculation.
+* Updated `zoom`, `minZoom`, `maxZoom` to accept changes after a map has rendered.
+* Added multiple data sets to the `px-map-marker-group` example, updating all examples
+  to use the new `fitToMarkersZoom` `auto` setting.
+
 v3.14.2
 ===================
 ## Bug Fix:
 * Click on visited route, then click on other route was changing the visited route color
 * Updated the demo for the same.
-
 
 v3.14.1
 ===================
