@@ -170,7 +170,7 @@
         radius: featureProperties.radius || attributeProperties.radius || 5,
         color: featureProperties.color || attributeProperties.color || '#3E87E8', // primary-blue,
         fillColor: featureProperties.fillColor || attributeProperties.fillColor || '#88BDE6', // $dv-light-blue
-        weight: featureProperties.weight || attributeProperties.weight || 2,
+        weight: featureProperties.weight || attributeProperties.weight || 5,
         opacity: featureProperties.opacity || attributeProperties.opacity || 1,
         fillOpacity: featureProperties.fillOpacity || attributeProperties.fillOpacity || 0.4,
       };
