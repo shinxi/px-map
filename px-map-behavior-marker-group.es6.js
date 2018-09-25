@@ -70,7 +70,7 @@
       data: {
         type: Object,
         observer: 'shouldUpdateInst'
-      },
+        },
 
       /**
        * Internal representation of the colorsByType object. See `_calculateColorsByType`.
@@ -309,6 +309,8 @@
               });
             }
           };
+        } else {
+          this._markerCloseAllPopups();
         }
       }
 
@@ -952,6 +954,9 @@
       marker.bindPopup(popup).openPopup();
       marker.__boundCloseFn = this._unbindAndClosePopup.bind(this, marker);
       marker.on('popupclose', marker.__boundCloseFn);
+
+      // TODO: Investigate (JIRA:UI-2535) reason opened prop doesnt udpate/goes in loop.
+      // this.opened = marker.id;
     },
 
     _unbindAndClosePopup(marker) {
@@ -964,6 +969,12 @@
       // dehydrate opened prop so,
       // upon map click closed popup opens back again on item click
       this.opened = null;
+    },
+
+    // close all popups on the mapInstance
+    _markerCloseAllPopups() {
+      const pxMapEl = document.getElementsByTagName('px-map')[0];
+      pxMapEl.elementInst.closePopup();
     },
 
     /**
