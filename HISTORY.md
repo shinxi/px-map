@@ -1,3 +1,9 @@
+v3.15.3
+===================
+## Bug Fixes:
+* Fix Marker Group: Marker is not able to highlight after data is updated.
+* Turning off `animate` clusterConfig, due to zoom out and open popup issue.
+* Added demo to highlight after data is updated.
 
 v3.15.2
 ===================
