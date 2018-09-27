@@ -1,3 +1,8 @@
+v3.15.4
+===================
+## Tweek / Enhancement:
+*  Make the weight to 7. The weight erlier was 5 and was still was uanble to click. 
+
 v3.15.3
 ===================
 ## Bug Fixes:
