@@ -16,7 +16,6 @@
  * limitations under the License.
  */
 
-
 (function () {
   /** **************************************************************************
    * BEHAVIORS
@@ -243,6 +242,12 @@
       } else if (lastOptions.showFeatureProperties !== nextOptions.showFeatureProperties) {
         if (nextOptions.showFeatureProperties) this._bindFeaturePopups();
         if (!nextOptions.showFeatureProperties) this._unbindFeaturePopups();
+      }
+
+      // close popups on the mapInstance
+      if (!this.showFeatureProperties) {
+        const pxMapEl = document.getElementsByTagName('px-map')[0];
+        pxMapEl.elementInst.closePopup();
       }
     },
 
