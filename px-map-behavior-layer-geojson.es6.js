@@ -185,7 +185,12 @@
 
       if (customPopup) {
         const popup = new PxMap.InfoPopup(JSON.parse(JSON.stringify(customPopup)));
-        return layer.bindPopup(popup);
+        if(this._isHandleFeatureTapped) {
+          //wait until the map layer render
+          setTimeout(() => {
+            return layer.bindPopup(popup).openPopup();
+          }, 0);
+        }
       }
 
       // Filter keys to remove info that should not be displayed in a popup.
@@ -204,7 +209,15 @@
         autoPanPadding: [1, 1],
       });
 
-      layer.bindPopup(popup);
+      if(this._isHandleFeatureTapped) {
+        if (customPopup) return;
+        //wait until the map layer render
+        setTimeout(() => {
+          layer.bindPopup(popup).openPopup();
+          //reset it, so prevents popup open on next data re-render
+          this._isHandleFeatureTapped = false;
+        }, 0);
+      }
     },
 
     _unbindFeaturePopups() {
@@ -215,6 +228,7 @@
     _unbindPopup(layer) {
       if (typeof layer.getPopup() !== 'undefined') {
         layer.unbindPopup();
+        this._isHandleFeatureTapped = false;
       }
     },
 
@@ -242,12 +256,6 @@
       } else if (lastOptions.showFeatureProperties !== nextOptions.showFeatureProperties) {
         if (nextOptions.showFeatureProperties) this._bindFeaturePopups();
         if (!nextOptions.showFeatureProperties) this._unbindFeaturePopups();
-      }
-
-      // close popups on the mapInstance
-      if (!this.showFeatureProperties) {
-        const pxMapEl = document.getElementsByTagName('px-map')[0];
-        pxMapEl.elementInst.closePopup();
       }
     },
 
@@ -347,7 +355,8 @@
      */
 
     _handleFeatureTapped(evt) {
-      this.set('showFeatureProperties', 'false');
+      //need this to handle popup open/close state
+      this._isHandleFeatureTapped = true;
 
       var features = this.data.features
       var featureIdObj = {};
@@ -365,7 +374,6 @@
         var currentTargetId = evt.target.feature.id;
       }
       const geoData = this.highlightSelectedFeature(this.data, currentTargetId, currentRouteColor);
-      this.set('showFeatureProperties', 'true');
       this.set('data', JSON.parse(JSON.stringify(geoData)));
 
       const detail = {};
