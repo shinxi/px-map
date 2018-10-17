@@ -1,7 +1,7 @@
 v3.15.6
 ===================
 ## Bug Fixes:
-*  Remove mnokey patch `px-map-layer-geojson` close popup when data changes
+*  Remove monkey patch fixes on `px-map-layer-geojson` close popup when data changes
 *  Fix: `px-map-layer-geojson` close popup when data changes
 
 v3.15.5
