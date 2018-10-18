@@ -51,9 +51,11 @@
   fill: var(--internal-px-map-icon-info-color);
 
   &.content-icon {
+    --iron-icon-width: 12px;
+    --iron-icon-height: 12px;
     width: 12px;
     height: 12px;
-    margin-left: 5px; 
+    margin-left: 5px;
     margin-top: 4.5px
   }
 }
