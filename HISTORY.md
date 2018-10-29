@@ -1,3 +1,9 @@
+v3.15.7
+===================
+## Bug Fixes:
+*  Fix: Reset _isHandleFeatureTapped flag after opening custom layer-geojson popup so, it does not
+   automatcially open the next custom popup.
+
 v3.15.6
 ===================
 ## Bug Fixes:
