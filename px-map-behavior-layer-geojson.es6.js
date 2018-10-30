@@ -188,7 +188,8 @@
         if(this._isHandleFeatureTapped) {
           //wait until the map layer render
           setTimeout(() => {
-            return layer.bindPopup(popup).openPopup();
+            layer.bindPopup(popup).openPopup();
+            this._isHandleFeatureTapped = false;
           }, 0);
         }
       }
@@ -228,7 +229,6 @@
     _unbindPopup(layer) {
       if (typeof layer.getPopup() !== 'undefined') {
         layer.unbindPopup();
-        this._isHandleFeatureTapped = false;
       }
     },
 
