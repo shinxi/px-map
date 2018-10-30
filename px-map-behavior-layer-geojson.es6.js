@@ -190,7 +190,6 @@
           setTimeout(() => {
             layer.bindPopup(popup).openPopup();
             this._isHandleFeatureTapped = false;
-            return true;
           }, 0);
         }
       }
