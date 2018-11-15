@@ -965,11 +965,15 @@
       const klassName = (popupSettings._Base && PxMap.hasOwnProperty(popupSettings._Base)) ? popupSettings._Base : 'InfoPopup';
       const popup = new PxMap[klassName](popupSettings);
       marker.bindPopup(popup).openPopup();
-      marker.__boundCloseFn = this._unbindAndClosePopup.bind(this, marker);
-      marker.on('popupclose', marker.__boundCloseFn);
+      // otherwise causes multiple re-render of elementInst that loses the state
+      if(this.opened !== null) {
+        marker.__boundCloseFn = this._unbindAndClosePopup.bind(this, marker);
+        marker.on('popupclose', marker.__boundCloseFn);
+      }
 
-      // TODO: Investigate (JIRA:UI-2535) reason opened prop doesnt udpate/goes in loop.
-      // this.opened = marker.id;
+      // reset to clicked marker.id to retain true state opened prop
+      // after map interaction
+      this.opened = marker.id;
     },
 
     _unbindAndClosePopup(marker) {

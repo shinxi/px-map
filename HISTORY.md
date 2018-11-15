@@ -1,3 +1,8 @@
+v3.15.8
+===================
+## Bug Fixes:
+*  Fix: Toggle popup does not work after closing from map click.
+
 v3.15.7
 ===================
 ## Bug Fixes:
