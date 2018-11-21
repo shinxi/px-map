@@ -253,9 +253,12 @@
 
     },
 
-    _handleMapClick() {
+    _handleMapClick(evt) {
       // reset opened prop upon map click
       this.opened = null;
+
+      // callback prop to user upon map click
+      this.fire('px-map-clicked', evt);
     },
     /**
      * Fired when the marker group is attached to a parent layer (e.g. the map).
@@ -898,7 +901,8 @@
           latLng: latLng,
           lat: lat,
           lng: lng,
-          feature: evt.layer.featureProperties ? evt.layer.featureProperties : undefined
+          feature: evt.layer.featureProperties ? evt.layer.featureProperties : undefined,
+          markerId: evt.layer.id // need markerId, so user can reset upon SingleMarkerTap
         };
         this.fire('px-map-marker-group-marker-tapped', detail);
       }
@@ -926,7 +930,8 @@
         latLng: latLng,
         lat: lat,
         lng: lng,
-        feature: evt.layer.featureProperties ? evt.layer.featureProperties : undefined
+        feature: evt.layer.featureProperties ? evt.layer.featureProperties : undefined,
+        markerId: evt.layer.id
       };
       this.fire('px-map-marker-group-marker-double-clicked', detail);
     },
