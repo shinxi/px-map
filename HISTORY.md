@@ -1,3 +1,8 @@
+v3.15.9
+===================
+## Bug Fixes:
+*  Fix: Toggle Pop Over use case as detailed in UI-2876.
+
 v3.15.8
 ===================
 ## Bug Fixes:
