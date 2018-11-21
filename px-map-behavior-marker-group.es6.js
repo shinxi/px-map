@@ -246,6 +246,16 @@
       this.async(function(){
         this.fire('px-map-marker-group-added');
       });
+
+      // create map element instance and an handler to click
+      const pxMapEl = document.getElementsByTagName('px-map')[0];
+      pxMapEl.elementInst.on('click', this._handleMapClick.bind(this));
+
+    },
+
+    _handleMapClick() {
+      // reset opened prop upon map click
+      this.opened = null;
     },
     /**
      * Fired when the marker group is attached to a parent layer (e.g. the map).
@@ -965,11 +975,8 @@
       const klassName = (popupSettings._Base && PxMap.hasOwnProperty(popupSettings._Base)) ? popupSettings._Base : 'InfoPopup';
       const popup = new PxMap[klassName](popupSettings);
       marker.bindPopup(popup).openPopup();
-      // otherwise causes multiple re-render of elementInst that loses the state
-      if(this.opened !== null) {
-        marker.__boundCloseFn = this._unbindAndClosePopup.bind(this, marker);
-        marker.on('popupclose', marker.__boundCloseFn);
-      }
+      marker.__boundCloseFn = this._unbindAndClosePopup.bind(this, marker);
+      marker.on('popupclose', marker.__boundCloseFn);
 
       // reset to clicked marker.id to retain true state opened prop
       // after map interaction
@@ -982,10 +989,6 @@
       marker.off('popupclose', marker.__boundCloseFn);
       marker.__boundCloseFn = null;
       marker.closePopup().unbindPopup();
-
-      // dehydrate opened prop so,
-      // upon map click closed popup opens back again on item click
-      this.opened = null;
     },
 
     // close all popups on the mapInstance
