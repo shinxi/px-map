@@ -95,6 +95,17 @@
         value: false,
         observer: 'shouldUpdateInst',
       },
+
+      /**
+       * Programatically highlights the selected route/segment and is updated when the
+       * user updates route/segment.
+       */
+      selectedFeature: {
+        type: String,
+        value: null,
+        observer: 'shouldUpdateInst',
+        notify: true
+      },
     },
 
     /**
@@ -135,6 +146,18 @@
 
       // Now call layer's add
       PxMapBehavior.LayerImpl.addInst.call(this, parent);
+      // create map element instance and an handler to click
+      const pxMapEl = document.getElementsByTagName('px-map')[0];
+      pxMapEl.elementInst.on('click', this._handleMapClick.bind(this));
+
+    },
+
+    _handleMapClick(evt) {
+      // reset selectedFeature prop upon map click
+      this.selectedFeature = null;
+
+      // callback prop to user upon map click
+      this.fire('px-map-clicked', evt);
     },
 
     createInst(options) {
@@ -147,11 +170,6 @@
           const style = this._getStyle(feature, featureProperties, attributeProperties);
 
           return new L.CircleMarker(latlng, style);
-        },
-
-        onEachFeature: (feature, layer) => {
-          if (!this.showFeatureProperties) return;
-          this._bindPopup(feature, layer);
         },
 
         style: (feature) => {
@@ -185,13 +203,10 @@
 
       if (customPopup) {
         const popup = new PxMap.InfoPopup(JSON.parse(JSON.stringify(customPopup)));
-        if(this._isHandleFeatureTapped) {
           //wait until the map layer render
           setTimeout(() => {
             layer.bindPopup(popup).openPopup();
-            this._isHandleFeatureTapped = false;
           }, 0);
-        }
       }
 
       // Filter keys to remove info that should not be displayed in a popup.
@@ -210,15 +225,11 @@
         autoPanPadding: [1, 1],
       });
 
-      if(this._isHandleFeatureTapped) {
-        if (customPopup) return;
-        //wait until the map layer render
-        setTimeout(() => {
-          layer.bindPopup(popup).openPopup();
-          //reset it, so prevents popup open on next data re-render
-          this._isHandleFeatureTapped = false;
-        }, 0);
-      }
+      if (customPopup) return;
+      //wait until the map layer render
+      setTimeout(() => {
+        layer.bindPopup(popup).openPopup();
+      }, 0);
     },
 
     _unbindFeaturePopups() {
@@ -240,8 +251,15 @@
     updateInst(lastOptions, nextOptions) {
       if (!Object.keys(nextOptions.data).length) {
         this.elementInst.clearLayers();
-      } else if (Object.keys(nextOptions.data).length && (lastOptions.dataHash !== nextOptions.dataHash || lastOptions.featureStyleHash !== nextOptions.featureStyleHash)) {
+      } else if (Object.keys(nextOptions.data).length &&
+        (lastOptions.dataHash !== nextOptions.dataHash ||
+          lastOptions.featureStyleHash !== nextOptions.featureStyleHash ||
+          this.selectedFeature ||
+          lastOptions.selectedFeature)) {
         const styleAttributeProperties = this.getInstOptions().featureStyle;
+
+        // toggle highlight selected feature
+        const geoData = this._toggleHighlightSelectedFeature(lastOptions, nextOptions);
 
         this.elementInst.clearLayers();
         this.elementInst.options.style = (feature) => {
@@ -249,9 +267,14 @@
           return this._getStyle(featureProperties, styleAttributeProperties);
         };
 
-        this.elementInst.addData(nextOptions.data);
+        this.elementInst.addData(geoData);
         if (nextOptions.showFeatureProperties) {
-          this._bindFeaturePopups();
+          this.elementInst.eachLayer(layer => {
+            // bind and open popup of selected feature
+            if(layer.feature.id === this.selectedFeature) {
+              this._bindPopup(layer.feature, layer)
+            }
+          });
         }
       } else if (lastOptions.showFeatureProperties !== nextOptions.showFeatureProperties) {
         if (nextOptions.showFeatureProperties) this._bindFeaturePopups();
@@ -266,28 +289,35 @@
         featureStyle: this.featureStyle || {},
         featureStyleHash: JSON.stringify(this.featureStyle || {}),
         showFeatureProperties: this.showFeatureProperties,
+        selectedFeature: this.selectedFeature,
       };
     },
 
-    highlightSelectedFeature(data, currentTargetId, currentRouteColor) {
-      const geoData = JSON.parse(JSON.stringify(data));
+    _toggleHighlightSelectedFeature(lastOptions, nextOptions) {
+      // un-highlight when no selectedFeature
+      if (this.selectedFeature === null) {
+        return lastOptions.data;
+      }
+
+      const geoData = JSON.parse(JSON.stringify(nextOptions.data));
       let objectToAppendWeight = {};
+      let objectToAppendHighlight = {};
       let objectToAppendColor = {};
-      let featureObject;
-      geoData.features.map((obj) => {
-        if (obj.id === currentTargetId) {
-          featureObject = obj;
+      let featureToHighlight;
+      geoData.features.map((feature) => {
+        if (feature.id === this.selectedFeature) {
+          featureToHighlight = feature;
         }
       });
 
-      objectToAppendWeight = JSON.parse(JSON.stringify(featureObject));
-      objectToAppendColor = JSON.parse(JSON.stringify(featureObject));
-      objectToAppendHighlight = JSON.parse(JSON.stringify(featureObject));
+      objectToAppendWeight = JSON.parse(JSON.stringify(featureToHighlight));
+      objectToAppendHighlight = JSON.parse(JSON.stringify(featureToHighlight));
+      objectToAppendColor = JSON.parse(JSON.stringify(featureToHighlight));
 
       objectToAppendWeight.properties.style = {
         weight: 7,
         opacity: 0.7,
-        color: currentRouteColor,
+        color: featureToHighlight.properties.style.color,
       };
 
       objectToAppendHighlight.properties.style = {
@@ -304,7 +334,6 @@
       geoData.features.push(objectToAppendWeight);
       geoData.features.push(objectToAppendHighlight);
       geoData.features.push(objectToAppendColor);
-
       return geoData;
     },
 
@@ -312,7 +341,6 @@
       if (!evt || !evt.layer) return;
 
       // Bind layer click events
-      evt.layer.on('click', this._handleFeatureTapped.bind(this));
       evt.layer.on('popupopen', this._handleFeaturePopupOpened.bind(this));
       evt.layer.on('popupclose', this._handleFeaturePopupClosed.bind(this));
 
@@ -352,45 +380,6 @@
      *   * {Object|undefined} detail.feature - Object containing the feature's GeoJSON source
      *
      * @event px-map-layer-geojson-feature-added
-     */
-
-    _handleFeatureTapped(evt) {
-      //need this to handle popup open/close state
-      this._isHandleFeatureTapped = true;
-
-      var features = this.data.features
-      var featureIdObj = {};
-      var uniqueFeatureArr = [];
-      for (var feature in features) {
-        if (!featureIdObj[features[feature].id]) {
-          featureIdObj[features[feature].id] = features[feature].id;
-          uniqueFeatureArr.push(features[feature]);
-        }
-      }
-
-      this.data.features = uniqueFeatureArr;
-      let currentRouteColor = evt.target.options.color;
-      if (evt.target && evt.target.feature) {
-        var currentTargetId = evt.target.feature.id;
-      }
-      const geoData = this.highlightSelectedFeature(this.data, currentTargetId, currentRouteColor);
-      this.set('data', JSON.parse(JSON.stringify(geoData)));
-
-      const detail = {};
-      if (evt.target && evt.target.feature) {
-        detail.feature = evt.target.feature;
-        detail.latlng = evt.latlng;
-        detail.routeSegmentId = currentTargetId;
-      }
-      this.fire('px-map-layer-geojson-feature-tapped', detail);
-    },
-    /**
-     * Fired when a feature is tapped by the user.
-     *
-     *   * {Object} detail - Contains the event details
-     *   * {Object|undefined} detail.feature - Object containing the feature's GeoJSON source
-     *
-     * @event px-map-layer-geojson-feature-tapped
      */
 
     _handleFeaturePopupOpened(evt) {
