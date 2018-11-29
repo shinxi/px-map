@@ -1,3 +1,8 @@
+v3.17.0
+===================
+## Enhancement:
+*  layer-geojson with new prop `selectedFeature` to highlight a particular route segment
+
 v3.16.0
 ===================
 ## Bug Fixes:
