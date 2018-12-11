@@ -1,3 +1,8 @@
+v3.18.0
+===================
+## Enhancement:
+*  Support highlight and un-highlight routes with `multiple px-map-layer-geojson`.
+
 v3.17.0
 ===================
 ## Enhancement:

@@ -64,6 +64,8 @@ limitations under the License.
           <px-map-layer-geojson id="pxLayerGeoJson" on-px-map-clicked="mapClicked" data="{{geoJSONLine}}" feature-style='{"color": "purple", "fillColor": "purple", "fillOpacity": "0.3"}'
             show-feature-properties intersecting-route-popup="<section><ul><li><a href='#'>3-4: 12 mi, 0:33min</a></li><li><a href='#'>4-5: 34 mi, 1:33min</a></li></ul></section>">
           </px-map-layer-geojson>
+          <px-map-layer-geojson id="pxLayerGeoJson1" on-px-map-clicked="mapClicked" data="{{geoJSONLine1}}" show-feature-properties>
+          </px-map-layer-geojson>
           <px-map-marker-custom lat="37.389933" lng="-121.971807" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white" icon-content="1"></px-map-marker-custom>
           <px-map-marker-custom lat="37.596371" lng="-122.081633" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white" icon-content="2" /></px-map-marker-custom>
           <px-map-marker-custom lat="37.336182" lng="-121.890603" icon="px-nav:unconfirmed" stroke-color="blue" fill-color="white" icon-content="3" /></px-map-marker-custom>
@@ -95,7 +97,7 @@ limitations under the License.
 
   document.addEventListener('WebComponentsReady', function () {
 
-    const geoJSONLine = {
+  const geoJSONLine = {
   "type": "FeatureCollection",
   "features": [
     {
@@ -174,6 +176,12 @@ limitations under the License.
         "minWidth": 100
       }
     },
+  ]
+};
+
+  const geoJSONLine1 = {
+    "type": "FeatureCollection",
+    "features": [
     {
       "type": "Feature",
       "id": "d0deb0eb-6a3c-4283-87f1-4893c50be2be",
@@ -4594,15 +4602,19 @@ limitations under the License.
         "minWidth": 100,
         "name": "1. Home to 2. [JOB-YYY] Sony"
       }
-    }
-  ]
-};
+    },
+    ]
+  }
+
+
 
     tmpl.geoJSONLine = geoJSONLine;
+    tmpl.geoJSONLine1 = geoJSONLine1;
     tmpl.mapClicked = () => {
       pxLayerGeoJson.selectedFeature = null;
     };
     var pxLayerGeoJson = document.getElementById('pxLayerGeoJson');
+    var pxLayerGeoJson1 = document.getElementById('pxLayerGeoJson1');
 
     // Trip-1 click
     document.getElementById('tripOne').addEventListener('click', function() {
@@ -4616,19 +4628,19 @@ limitations under the License.
       pxLayerGeoJson.selectedFeature = id;
     });
 
-    // route-3 click
+    // route-3 click(pxLayerGeoJson1)
     document.getElementById('tripThree').addEventListener('click', function() {
-      const { id } = geoJSONLine.features[2];
-      pxLayerGeoJson.selectedFeature = id;
+      const { id } = geoJSONLine1.features[0];
+      pxLayerGeoJson1.selectedFeature = id;
     });
 
-    // route-3 click
+    // route-4 click(pxLayerGeoJson1)
     document.getElementById('tripFour').addEventListener('click', function() {
-      const { id } = geoJSONLine.features[3];
-      pxLayerGeoJson.selectedFeature = id;
+      const { id } = geoJSONLine1.features[1];
+      pxLayerGeoJson1.selectedFeature = id;
     });
 
-    // route-3 click
+    // clear-highlight click
     document.getElementById('clearHighlight').addEventListener('click', function() {
       pxLayerGeoJson.selectedFeature = null;
     });

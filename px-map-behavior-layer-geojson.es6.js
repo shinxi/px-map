@@ -109,6 +109,10 @@
     },
 
     /**
+     * Local/private property that aggregates multiple geojson elements feature/route segments
+     */
+    _multipleGeoJsonFeatures: [],
+    /**
      * Forces the GeoJSON layer to deeply check the `data` attribute for differences
      * in the data from the last draw, and make any necessary updates. Call this
      * method if you are passing an object by reference to `data` and making deep
@@ -140,6 +144,7 @@
       // added events to attach listeners/notify the world the layer is added
       if (this.elementInst.getLayers().length !== 0) {
         this.elementInst.eachLayer((layer) => {
+          this._multipleGeoJsonFeatures.push(layer.feature);
           this.elementInst.fire('layeradd', { layer });
         });
       }
@@ -149,7 +154,15 @@
       // create map element instance and an handler to click
       const pxMapEl = document.getElementsByTagName('px-map')[0];
       pxMapEl.elementInst.on('click', this._handleMapClick.bind(this));
+    },
 
+    // get non-modified original feature data from multiple geojson elements
+    _getOriginalData() {
+      const originalData = {
+        type: this.data.type,
+        features: this._multipleGeoJsonFeatures,
+      }
+      return originalData;
     },
 
     _handleMapClick(evt) {
@@ -259,7 +272,7 @@
         const styleAttributeProperties = this.getInstOptions().featureStyle;
 
         // toggle highlight selected feature
-        const geoData = this._toggleHighlightSelectedFeature(lastOptions, nextOptions);
+        const geoData = this._toggleHighlightSelectedFeature();
 
         this.elementInst.clearLayers();
         this.elementInst.options.style = (feature) => {
@@ -293,13 +306,14 @@
       };
     },
 
-    _toggleHighlightSelectedFeature(lastOptions, nextOptions) {
+    _toggleHighlightSelectedFeature() {
+      const originalData = this._getOriginalData();
       // un-highlight when no selectedFeature
       if (this.selectedFeature === null) {
-        return lastOptions.data;
+        return originalData;
       }
 
-      const geoData = JSON.parse(JSON.stringify(nextOptions.data));
+      const geoData = JSON.parse(JSON.stringify(originalData));
       let objectToAppendWeight = {};
       let objectToAppendHighlight = {};
       let objectToAppendColor = {};
