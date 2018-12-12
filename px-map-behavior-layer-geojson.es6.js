@@ -109,10 +109,6 @@
     },
 
     /**
-     * Local/private property that aggregates multiple geojson elements feature/route segments
-     */
-    _multipleGeoJsonFeatures: [],
-    /**
      * Forces the GeoJSON layer to deeply check the `data` attribute for differences
      * in the data from the last draw, and make any necessary updates. Call this
      * method if you are passing an object by reference to `data` and making deep
@@ -144,7 +140,6 @@
       // added events to attach listeners/notify the world the layer is added
       if (this.elementInst.getLayers().length !== 0) {
         this.elementInst.eachLayer((layer) => {
-          this._multipleGeoJsonFeatures.push(layer.feature);
           this.elementInst.fire('layeradd', { layer });
         });
       }
@@ -154,15 +149,7 @@
       // create map element instance and an handler to click
       const pxMapEl = document.getElementsByTagName('px-map')[0];
       pxMapEl.elementInst.on('click', this._handleMapClick.bind(this));
-    },
 
-    // get non-modified original feature data from multiple geojson elements
-    _getOriginalData() {
-      const originalData = {
-        type: this.data.type,
-        features: this._multipleGeoJsonFeatures,
-      }
-      return originalData;
     },
 
     _handleMapClick(evt) {
@@ -272,7 +259,7 @@
         const styleAttributeProperties = this.getInstOptions().featureStyle;
 
         // toggle highlight selected feature
-        const geoData = this._toggleHighlightSelectedFeature();
+        const geoData = this._toggleHighlightSelectedFeature(nextOptions);
 
         this.elementInst.clearLayers();
         this.elementInst.options.style = (feature) => {
@@ -306,14 +293,13 @@
       };
     },
 
-    _toggleHighlightSelectedFeature() {
-      const originalData = this._getOriginalData();
+    _toggleHighlightSelectedFeature(nextOptions) {
       // un-highlight when no selectedFeature
       if (this.selectedFeature === null) {
-        return originalData;
+        return nextOptions.data;
       }
 
-      const geoData = JSON.parse(JSON.stringify(originalData));
+      const geoData = JSON.parse(JSON.stringify(nextOptions.data));
       let objectToAppendWeight = {};
       let objectToAppendHighlight = {};
       let objectToAppendColor = {};
@@ -324,14 +310,24 @@
         }
       });
 
+      // just return original data when there is no matching id found(no route is highlighted)
+      if(!featureToHighlight) {
+        return geoData;
+      }
+
       objectToAppendWeight = JSON.parse(JSON.stringify(featureToHighlight));
       objectToAppendHighlight = JSON.parse(JSON.stringify(featureToHighlight));
       objectToAppendColor = JSON.parse(JSON.stringify(featureToHighlight));
 
+      // default to primary-blue in case feature doesn't have style color
+      const segmentDefaultColor = featureToHighlight.properties &&
+        featureToHighlight.properties.style &&
+        featureToHighlight.properties.style.color || '#3E87E8'; // primary-blue,
+
       objectToAppendWeight.properties.style = {
         weight: 7,
         opacity: 0.7,
-        color: featureToHighlight.properties.style.color,
+        color: segmentDefaultColor
       };
 
       objectToAppendHighlight.properties.style = {

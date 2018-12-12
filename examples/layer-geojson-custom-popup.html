@@ -84,6 +84,11 @@ limitations under the License.
       <li><button id="tripFour">Long Trip - Overlapped</button></li>
     </ul>
     <ul>
+      <li><hr /></li>
+      <li><button id="updateData">Update Data</button></li>
+      <li><hr /></li>
+      <li><button id="updateDataTrip">Updated Data Trip - Highlight</button></li>
+      <li><hr /></li>
       <li><button id="clearHighlight">Clear - Highlight</button></li>
     </ul>
   </section>
@@ -4606,12 +4611,57 @@ limitations under the License.
     ]
   }
 
-
+  const geoJSONLine2 = {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "id": "64c074a9-1d03-4404-b2bd-4ba662a346c9",
+        "properties": {},
+        "geometry": {
+          "type": "LineString",
+          "coordinates": [
+            [
+              -122.21363067626952,
+              37.48739055919013
+            ],
+            [
+              -122.1799850463867,
+              37.4530574713902
+            ],
+            [
+              -122.13878631591798,
+              37.42170795425973
+            ],
+            [
+              -122.1030807495117,
+              37.39716439046104
+            ],
+            [
+              -122.03887939453125,
+              37.322120359451766
+            ],
+            [
+              -122.02926635742188,
+              37.323212446730174
+            ]
+          ]
+        },
+        "customPopup": {
+        "content": "<span style=\"display: block;text-align: center; font-size: 13px;\">Updated Data Trip</strong>.</span>",
+        "margin": "10px",
+        "maxWidth": 400,
+        "minWidth": 100
+      }
+      }
+    ]
+  }
 
     tmpl.geoJSONLine = geoJSONLine;
     tmpl.geoJSONLine1 = geoJSONLine1;
     tmpl.mapClicked = () => {
       pxLayerGeoJson.selectedFeature = null;
+      pxLayerGeoJson1.selectedFeature = null;
     };
     var pxLayerGeoJson = document.getElementById('pxLayerGeoJson');
     var pxLayerGeoJson1 = document.getElementById('pxLayerGeoJson1');
@@ -4620,29 +4670,49 @@ limitations under the License.
     document.getElementById('tripOne').addEventListener('click', function() {
       const { id } = geoJSONLine.features[0];
       pxLayerGeoJson.selectedFeature = id;
+      pxLayerGeoJson1.selectedFeature = id;
     });
 
     // route-2 click
     document.getElementById('tripTwo').addEventListener('click', function() {
       const { id } = geoJSONLine.features[1];
       pxLayerGeoJson.selectedFeature = id;
+      pxLayerGeoJson1.selectedFeature = id;
     });
 
     // route-3 click(pxLayerGeoJson1)
     document.getElementById('tripThree').addEventListener('click', function() {
       const { id } = geoJSONLine1.features[0];
       pxLayerGeoJson1.selectedFeature = id;
+      pxLayerGeoJson.selectedFeature = id;
     });
 
     // route-4 click(pxLayerGeoJson1)
     document.getElementById('tripFour').addEventListener('click', function() {
       const { id } = geoJSONLine1.features[1];
       pxLayerGeoJson1.selectedFeature = id;
+      pxLayerGeoJson.selectedFeature = id;
+    });
+
+
+    // update data
+    document.getElementById('updateData').addEventListener('click', function() {
+      tmpl.geoJSONLine = geoJSONLine2;
+      pxLayerGeoJson.selectedFeature = null;
+      pxLayerGeoJson1.selectedFeature = null;
+    });
+
+    // updated data route click
+    document.getElementById('updateDataTrip').addEventListener('click', function() {
+      const { id } = geoJSONLine2.features[0];
+      pxLayerGeoJson1.selectedFeature = id;
+      pxLayerGeoJson.selectedFeature = id;
     });
 
     // clear-highlight click
     document.getElementById('clearHighlight').addEventListener('click', function() {
       pxLayerGeoJson.selectedFeature = null;
+      pxLayerGeoJson1.selectedFeature = null;
     });
 
   });
