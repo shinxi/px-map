@@ -259,7 +259,7 @@
         const styleAttributeProperties = this.getInstOptions().featureStyle;
 
         // toggle highlight selected feature
-        const geoData = this._toggleHighlightSelectedFeature(lastOptions, nextOptions);
+        const geoData = this._toggleHighlightSelectedFeature(nextOptions);
 
         this.elementInst.clearLayers();
         this.elementInst.options.style = (feature) => {
@@ -293,10 +293,10 @@
       };
     },
 
-    _toggleHighlightSelectedFeature(lastOptions, nextOptions) {
+    _toggleHighlightSelectedFeature(nextOptions) {
       // un-highlight when no selectedFeature
       if (this.selectedFeature === null) {
-        return lastOptions.data;
+        return nextOptions.data;
       }
 
       const geoData = JSON.parse(JSON.stringify(nextOptions.data));
@@ -310,14 +310,24 @@
         }
       });
 
+      // just return original data when there is no matching id found(no route is highlighted)
+      if(!featureToHighlight) {
+        return geoData;
+      }
+
       objectToAppendWeight = JSON.parse(JSON.stringify(featureToHighlight));
       objectToAppendHighlight = JSON.parse(JSON.stringify(featureToHighlight));
       objectToAppendColor = JSON.parse(JSON.stringify(featureToHighlight));
 
+      // default to primary-blue in case feature doesn't have style color
+      const segmentDefaultColor = featureToHighlight.properties &&
+        featureToHighlight.properties.style &&
+        featureToHighlight.properties.style.color || '#3E87E8'; // primary-blue,
+
       objectToAppendWeight.properties.style = {
         weight: 7,
         opacity: 0.7,
-        color: featureToHighlight.properties.style.color,
+        color: segmentDefaultColor
       };
 
       objectToAppendHighlight.properties.style = {
