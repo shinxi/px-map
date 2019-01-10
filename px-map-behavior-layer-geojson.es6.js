@@ -396,6 +396,7 @@
       const detail = {};
       if (evt.target && evt.target.feature) {
         detail.feature = evt.target.feature;
+        detail.latLng = evt.popup.getLatLng();
       }
       this.fire('px-map-layer-geojson-feature-popup-opened', detail);
     },
