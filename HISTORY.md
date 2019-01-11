@@ -1,3 +1,8 @@
+v3.19.0
+===================
+## Enhancement:
+*  Return the geocode (lat/lng) of popup of `px-map-layer-geojson` when open.
+
 v3.18.0
 ===================
 ## Enhancement:
