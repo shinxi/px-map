@@ -1,3 +1,8 @@
+v3.19.2
+===================
+## Enhancement:
+*  Make the padding value configurable in `map-icon-symbol`.
+
 v3.19.1
 ===================
 ## Enhancement:
