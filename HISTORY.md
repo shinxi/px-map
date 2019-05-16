@@ -1,3 +1,9 @@
+v3.19.3
+===================
+## Bug Fix:
+*  Fix provided for static marker being off when rendered in RTL. Added a left 0 to the botton icon
+*  in `_map-icon-static.scss`.
+
 v3.19.2
 ===================
 ## Enhancement:
