@@ -1,3 +1,8 @@
+v3.19.4
+===================
+## Bug Fix:
+*  Update leaflet.markercluster version to 1.4.1, in case to accidentally resolve future version (leaflet.markercluster has released 1.5.3 recently).
+
 v3.19.3
 ===================
 ## Bug Fix:
