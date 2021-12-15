@@ -1,3 +1,8 @@
+v3.19.7
+===================
+## Enhancement:
+*  Return the geocode (lat/lng) and id of route segment when click on it.
+
 v3.19.6
 ===================
 ## Bug Fix:

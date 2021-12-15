@@ -157,7 +157,8 @@
       this.selectedFeature = null;
 
       // callback prop to user upon map click
-      this.fire('px-map-clicked', evt);
+      this.fire('px-map-clicked', this._tappedFeature || evt);
+      this._tappedFeature = null;
     },
 
     createInst(options) {
@@ -351,6 +352,7 @@
       if (!evt || !evt.layer) return;
 
       // Bind layer click events
+      evt.layer.on('click', this._handleFeatureTapped.bind(this));
       evt.layer.on('popupopen', this._handleFeaturePopupOpened.bind(this));
       evt.layer.on('popupclose', this._handleFeaturePopupClosed.bind(this));
 
@@ -368,6 +370,19 @@
      *   * {Object|undefined} detail.feature - Object containing the feature's GeoJSON source
      *
      * @event px-map-layer-geojson-feature-added
+     */
+
+    _handleFeatureTapped(evt) {
+      if (evt.target && evt.target.feature) {
+        this._tappedFeature = {
+          feature: evt.target.feature,
+          latlng: evt.latlng,
+          routeSegmentId: evt.target.feature.id,
+        };
+      }
+    },
+    /**
+     * Fired when a feature is tapped by the user.
      */
 
     _handleFeatureRemoved(evt) {
