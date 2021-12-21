@@ -296,7 +296,7 @@
 
     _toggleHighlightSelectedFeature(nextOptions) {
       // un-highlight when no selectedFeature
-      if (this.selectedFeature === null) {
+      if (this.selectedFeature === null || nextOptions.data.highlightOnSelected === false) {
         return nextOptions.data;
       }
 

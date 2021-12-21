@@ -2,6 +2,7 @@ v3.19.7
 ===================
 ## Enhancement:
 *  Return the geocode (lat/lng) and id of route segment when click on it.
+*  If highlightOnSelected in data is specified as not required, the segment will not be highlighted when it is selected.
 
 v3.19.6
 ===================
