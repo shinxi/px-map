@@ -201,7 +201,6 @@
 
     _bindPopup(feature, layer) {
       const customPopup = feature.customPopup;
-
       if (customPopup) {
         const popup = new PxMap.InfoPopup(JSON.parse(JSON.stringify(customPopup)));
           //wait until the map layer render
@@ -316,35 +315,56 @@
         return geoData;
       }
 
-      objectToAppendWeight = JSON.parse(JSON.stringify(featureToHighlight));
-      objectToAppendHighlight = JSON.parse(JSON.stringify(featureToHighlight));
-      objectToAppendColor = JSON.parse(JSON.stringify(featureToHighlight));
+      if (featureToHighlight.properties.selectedStyle) {
+        const border = JSON.parse(JSON.stringify(featureToHighlight));
+        const fill = JSON.parse(JSON.stringify(featureToHighlight));
+        const selectedStyle = featureToHighlight.properties.selectedStyle;
 
-      // default to primary-blue in case feature doesn't have style color
-      const segmentDefaultColor = featureToHighlight.properties &&
-        featureToHighlight.properties.style &&
-        featureToHighlight.properties.style.color || '#3E87E8'; // primary-blue,
+        border.properties.style = {
+          weight: selectedStyle.borderWidth,
+          opacity: selectedStyle.borderOpacity,
+          color: selectedStyle.borderColor,
+        }
 
-      objectToAppendWeight.properties.style = {
-        weight: 7,
-        opacity: 0.7,
-        color: segmentDefaultColor
-      };
+        fill.properties.style = {
+          weight: selectedStyle.fillWidth,
+          opacity: selectedStyle.fillOpacity,
+          color: selectedStyle.fillColor,
+        }
 
-      objectToAppendHighlight.properties.style = {
-        weight: 7,
-        color: 'rgba(0, 0, 0, 0.5)',
-      };
+        geoData.features.push(border);
+        geoData.features.push(fill);
+      } else {
+        objectToAppendWeight = JSON.parse(JSON.stringify(featureToHighlight));
+        objectToAppendHighlight = JSON.parse(JSON.stringify(featureToHighlight));
+        objectToAppendColor = JSON.parse(JSON.stringify(featureToHighlight));
 
-      objectToAppendColor.properties.style = {
-        weight: 1,
-        opacity: 1,
-        color: 'white',
-      };
+        // default to primary-blue in case feature doesn't have style color
+        const segmentDefaultColor = featureToHighlight.properties &&
+          featureToHighlight.properties.style &&
+          featureToHighlight.properties.style.color || '#3E87E8'; // primary-blue,
 
-      geoData.features.push(objectToAppendWeight);
-      geoData.features.push(objectToAppendHighlight);
-      geoData.features.push(objectToAppendColor);
+        objectToAppendWeight.properties.style = {
+          weight: 7,
+          opacity: 0.7,
+          color: segmentDefaultColor
+        };
+
+        objectToAppendHighlight.properties.style = {
+          weight: 7,
+          color: 'rgba(0, 0, 0, 0.5)',
+        };
+
+        objectToAppendColor.properties.style = {
+          weight: 1,
+          opacity: 1,
+          color: 'white',
+        };
+
+        geoData.features.push(objectToAppendWeight);
+        geoData.features.push(objectToAppendHighlight);
+        geoData.features.push(objectToAppendColor);
+      }
       return geoData;
     },
 

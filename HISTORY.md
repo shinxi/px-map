@@ -1,3 +1,9 @@
+v3.19.8
+===================
+## Enhancement:
+*  Increase the size, font size and border of custom icons.
+*  Support for using custom styles for highlighted segments.
+
 v3.19.7
 ===================
 ## Enhancement:

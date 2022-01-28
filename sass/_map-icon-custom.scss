@@ -30,8 +30,8 @@
 }
 
 .map-icon-custom__wrapper {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   position: relative;
 }
 
@@ -40,14 +40,16 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 22px;
-  height: 22px;
-  line-height: 22px;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
   color: var(--internal-px-map-icon-info-color);
-  font-size: 10px;
+  font-size: 15px;
+  font-weight: bold;
   text-align: center;
   vertical-align: middle;
   stroke: var(--px-map-icon-unknown-color);
+  stroke-width: 2px;
   fill: var(--internal-px-map-icon-info-color);
 
   &.content-icon {
@@ -55,7 +57,7 @@
     --iron-icon-height: 12px;
     width: 12px;
     height: 12px;
-    margin-left: 5px;
-    margin-top: 4.5px
+    margin-left: 7px;
+    margin-top: 6.5px;
   }
 }

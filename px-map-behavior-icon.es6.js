@@ -332,14 +332,14 @@
       // Custom template
       const html = `
         <div class="map-icon-custom__wrapper">
-          <px-icon icon="${type}" style="stroke:${strokeColor}; fill:${fillColor};"></px-icon>
+          <px-icon icon="${type}" style="stroke:${strokeColor}; fill:${fillColor}; width: 26px; height: 26px; stroke-width: 2px;"></px-icon>
           ${iconVal}
         </div>
       `;
 
       const className = this._generateCustomIconClasses(type, styleScope);
-      const iconSize = L.point(22, 22);
-      const iconAnchor = L.point(11, 11);
+      const iconSize = L.point(26, 26);
+      const iconAnchor = L.point(13, 13);
       const popupAnchor = L.point(0, -16);
 
       // Define the `divIcon` options
