@@ -1,3 +1,8 @@
+v3.19.9
+===================
+## Enhancement:
+*  Update leaflet-bing-tiles reference
+
 v3.19.8
 ===================
 ## Enhancement:
