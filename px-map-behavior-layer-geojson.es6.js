@@ -324,13 +324,14 @@
           weight: selectedStyle.borderWidth,
           opacity: selectedStyle.borderOpacity,
           color: selectedStyle.borderColor,
-        }
+        };
+        border.isBorder = true;
 
         fill.properties.style = {
           weight: selectedStyle.fillWidth,
           opacity: selectedStyle.fillOpacity,
           color: selectedStyle.fillColor,
-        }
+        };
 
         geoData.features.push(border);
         geoData.features.push(fill);
@@ -375,6 +376,8 @@
       evt.layer.on('click', this._handleFeatureTapped.bind(this));
       evt.layer.on('popupopen', this._handleFeaturePopupOpened.bind(this));
       evt.layer.on('popupclose', this._handleFeaturePopupClosed.bind(this));
+      evt.layer.on('mouseover', this._handleFeatureMouseOver.bind(this));
+      evt.layer.on('mouseout', this._handleFeatureMouseOut.bind(this));
 
       const detail = {};
       if (evt.layer && evt.layer.feature) {
@@ -401,6 +404,29 @@
         };
       }
     },
+
+    _handleFeatureMouseOver(evt) {
+      const layer = evt.target;
+      if (layer && layer.feature && layer.feature.isBorder !== true) {
+        this.fire('px-map-layer-geojson-feature-mouse-over', {
+          event: evt.originalEvent,
+          routeSegmentId: layer.feature.id,
+          popup: layer.feature.routePopup && layer.feature.routePopup.content,
+        });
+      }
+    },
+
+    _handleFeatureMouseOut(evt) {
+      const layer = evt.target;
+      if (layer && layer.feature && layer.feature.isBorder !== true) {
+        this.fire('px-map-layer-geojson-feature-mouse-out', {
+          event: evt.originalEvent,
+          routeSegmentId: layer.feature.id,
+          popup: layer.feature.routePopup && layer.feature.routePopup.content,
+        });
+      }
+    },
+
     /**
      * Fired when a feature is tapped by the user.
      */

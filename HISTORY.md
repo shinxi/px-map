@@ -1,3 +1,8 @@
+v3.19.10
+===================
+## Enhancement:
+*  Add "px-map-layer-geojson-feature-mouse-over" and "px-map-layer-geojson-feature-mouse-out" events to px-map-layer-geojson element.
+
 v3.19.9
 ===================
 ## Enhancement:
