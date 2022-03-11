@@ -1,3 +1,9 @@
+v3.19.11
+===================
+## Bug Fix:
+*  Filter the custom property "selectedStyle" to not display it in a popup.
+*  Bypass the click event on highlight feature.
+
 v3.19.10
 ===================
 ## Enhancement:
