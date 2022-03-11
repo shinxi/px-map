@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-(function () {
+ (function () {
   /** **************************************************************************
    * BEHAVIORS
    *************************************************************************** */
@@ -211,7 +211,7 @@
 
       // Filter keys to remove info that should not be displayed in a popup.
       // If no keys remain, do not bind a popup.
-      const popupDataKeys = Object.keys(feature.properties).filter(key => feature.properties.hasOwnProperty(key) && feature.properties[key] !== 'unset' && key !== 'style');
+      const popupDataKeys = Object.keys(feature.properties).filter(key => feature.properties.hasOwnProperty(key) && feature.properties[key] !== 'unset' && key !== 'style' && key !== 'selectedStyle');
       if (!popupDataKeys.length) return;
 
       const popupData = popupDataKeys.reduce((accum, key) => {
@@ -326,12 +326,14 @@
           color: selectedStyle.borderColor,
         };
         border.isBorder = true;
+        border.isHighlighted = true;
 
         fill.properties.style = {
           weight: selectedStyle.fillWidth,
           opacity: selectedStyle.fillOpacity,
           color: selectedStyle.fillColor,
         };
+        fill.isHighlighted = true;
 
         geoData.features.push(border);
         geoData.features.push(fill);
@@ -396,7 +398,7 @@
      */
 
     _handleFeatureTapped(evt) {
-      if (evt.target && evt.target.feature) {
+      if (evt.target && evt.target.feature && !evt.target.feature.isHighlighted) {
         this._tappedFeature = {
           feature: evt.target.feature,
           latlng: evt.latlng,
