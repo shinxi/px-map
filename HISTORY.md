@@ -1,3 +1,8 @@
+v3.19.12
+===================
+## Enhancement:
+* Expose subdomains property to make it configurable
+
 v3.19.11
 ===================
 ## Bug Fix:
