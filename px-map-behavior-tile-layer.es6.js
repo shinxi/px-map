@@ -62,7 +62,20 @@
         type: Boolean,
         value: false,
         observer: 'shouldUpdateInst'
-      }
+      },
+
+      /**
+       * The subdomains of the tile service. Can be passed in the form of
+       * one string (where each letter is a subdomain name).
+       * a, b or c by default, can be omitted
+       *
+       * @type {String}
+       */
+      subdomains: {
+        type: String,
+        value: 'abc',
+        observer: 'shouldUpdateInst'
+      },
     },
 
     canAddInst() {
@@ -70,7 +83,7 @@
     },
 
     createInst(options) {
-      return L.tileLayer(options.url);
+      return L.tileLayer(options.url, { subdomains: options.subdomains });
     },
 
     updateInst(lastOptions, nextOptions) {
@@ -81,7 +94,8 @@
 
     getInstOptions() {
       return {
-        url: this.decodeUrl ? decodeURI(this.url) : this.url
+        url: this.decodeUrl ? decodeURI(this.url) : this.url,
+        subdomains: this.subdomains
       };
     }
   };
